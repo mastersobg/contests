@@ -1,3 +1,4 @@
+#pragma comment(linker, "/STACK:16777216")
 #include<iostream>
 #include<cstdio>
 #include<set>
@@ -30,7 +31,7 @@ typedef vector<pii> vpii;
 #define dbgm( v, n ) { cerr << #v << "={";for( int I=0;I<n;++I)cerr << " " << (v)[i];cerr<<" }\n"; }
 
 const int INF = 1 << 29;
-const int MAX_N = 102400; //100kb
+const int MAX_N = 20000; 
 
 struct node_t {
     map<char,int> next;
@@ -69,7 +70,12 @@ struct node_t {
         this->ch = ch;
         this->link = -1;
     }
-
+    inline void clear() {
+        link = -1;
+        next.clear();
+        go.clear();
+        leaf = term = true;
+    }
     inline void clear_next(){
         next.clear();
     }
@@ -83,10 +89,11 @@ node_t nodes[MAX_N];
 int nodes_used = 0;
 
 void init() {
-    node_t &root = nodes[nodes_used++];
-    root.link = -1;
-    root.clear_next();
-    root.clear_go();
+    for(int i = 0; i < MAX_N; ++i) {
+        node_t &node = nodes[i];
+        node.clear();
+    }
+    nodes_used = 1;
 }
 void add_string(string & s, int root = 0) {
     for(int i = s.size() - 1; i >= 0; --i) {
@@ -123,9 +130,6 @@ int link(int root) {
 int go(int root, char c) {
     node_t &node = nodes[root];
     if(!node.has_go(c)) {
-        //dbg(root);
-        //dbg(node.has_next(c));
-        //dbg((int)c);
         int next;
         if(node.has_next(c)) {
             next = node.get_next(c);
@@ -134,46 +138,71 @@ int go(int root, char c) {
             next = 0;
         }
         else {
-            //dbg("here");
             next = go(link(root), c);
         }
         node.set_go(c, next);
     }
     return node.get_go(c);
 }
+
+const int MAX_WORDS_CNT = 11000;
+
+string words[MAX_WORDS_CNT];
+vector<string> text;
+
+int boards(int it, int &start, int &end, int n) {
+    int shift = n >> 3;
+    if(shift == 0) {
+        if(it == 0) {
+            start = 0;
+            end = n;
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    start = shift * it;
+    end = start + shift;
+    end = min(end, n);
+    return start < n;
+}
 int main() {
 #ifndef ONLINE_JUDGE
     freopen("input.txt", "r", stdin);
 #endif
-    init();
     int n;
     cin >> n;
     getchar();
-    for(int i = 0; i < n; ++i) {
-        string s;
-        getline(cin, s);
-        add_string(s);
-    }
+    for(int i = 0; i < n; ++i)
+        getline(cin, words[i]);
     int lines;
     cin >> lines;
     getchar();
-    for(int it = 0; it < lines; ++it) {
-        string line;
-        getline(cin, line);
-        int root = 0;
-        for(int i = line.size() - 1; i >= 0; --i){
-            char c = line[i];
-            root = go(root, c);
-            //dbg(root);
-            //dbg(nodes[1].term);
-            if(nodes[root].term) {
-                //dbg(i);
-                cout << (it + 1) << " " << (i + 1) << endl;
-                return 0;
+    text.resize(lines);
+    for(int i = 0; i < lines; ++i)
+        getline(cin, text[i]);
+    pii ret = mp(INF,INF);
+    int start, end;
+    for(int iter = 0; boards(iter, start, end, n); ++iter) {
+        init();
+        for(;start < end; ++start)
+            add_string(words[start]);
+        for(int it = 0; it < lines; ++it) {
+            string line = text[it];
+            int root = 0;
+            for(int i = line.size() - 1; i >= 0; --i) {
+                char c = line[i];
+                root = go(root, c);
+                if(nodes[root].term)
+                    ret = min(ret, mp(it+1, i+1));
             }
         }
     }
-    cout << "Passed\n";
+    if(ret.x == INF && ret.y == INF)
+        cout << "Passed\n";
+    else
+        cout << ret.x << " " << ret.y << endl;
     return 0;
 }
 
