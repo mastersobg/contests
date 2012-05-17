@@ -25,15 +25,15 @@ typedef vector<pii> vpii;
 #define y second
 #define mp make_pair
 #define pb push_back
-#define dbg( x ) { cerr << #x << "=" << x << endl; }
-#define dbgv( v ) { cerr << #v << "={";for( int I=0;I<(int)(v).size();++I)cerr << " " << (v)[i];cerr<<" }\n"; }
-#define dbgm( v, n ) { cerr << #v << "={";for( int I=0;I<n;++I)cerr << " " << (v)[i];cerr<<" }\n"; }
+#define dbg(x) { cerr << #x << "=" << x << endl; }
+#define dbgv(v) { cerr << #v << "={";for( int I=0;I<(int)(v).size();++I)cerr << " " << (v)[I];cerr<<" }\n"; }
+#define dbgm(v, n) { cerr << #v << "={";for( int I=0;I<n;++I)cerr << " " << (v)[I];cerr<<" }\n"; }
 
 const int INF = 1 << 29;
 
 int main() {
 #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
+    stdin = freopen("input.txt", "r", stdin);
 #endif
     return 0;
 }
