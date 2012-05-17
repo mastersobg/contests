@@ -1,3 +1,35 @@
+10 27
+a b
+a c
+a d
+a e
+a f
+a g
+a h
+a i
+a j
+d h
+d i
+d j
+e f
+e g
+e h
+e i
+e j
+f g
+f h
+f i
+f j
+g h
+g i
+g j
+h i
+h j
+i j
+a
+
+
+
 6
 7
 Tanya Lena
@@ -8,6 +40,47 @@ Lena Vitya
 Natasha Vitya
 Masha Vitya
 Tanya
+
+3
+3
+a b
+b c
+c a
+c 
+
+5
+4
+a b
+a c
+b d
+c e
+a
+
+
+
+
+
+4 3
+a b
+a c
+a d
+a
+
+
+2 1
+a b
+b
+
+
+
+
+
+
+4
+3
+1 2
+2 3
+3 4
 
 1
 0

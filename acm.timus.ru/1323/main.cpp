@@ -45,16 +45,15 @@ int get_idx(string &name) {
     return n2i[name];
 }
 
-string get_name(int &idx) {
+string get_name(char &idx) {
     return i2n[idx];
 }
 
 int n, m;
 set<char> g[MAX_N];
-char move[MASK][MASK];
-vpii move_p[MASK][MASK];
+char cmove[MASK][MASK];
 int dp[MASK];
-pair<vpii,int> prev[MASK];
+int cprev[MASK];
 
 int rec(int mask) {
     int &ret = dp[mask];
@@ -63,25 +62,12 @@ int rec(int mask) {
     if(mask != 0) {
         ret = INF;
         for(int m = mask; m; m = (m - 1) & mask) {
-            if(move[mask][m]) {
+            if(cmove[mask][m]) {
                 int next_mask = mask ^ m;
                 int f = rec(next_mask) + 1;
                 if(f < ret) {
                     ret = f;
-                    dbg("try");
-                    dbg(mask);
-                    dbg(m);
-                    vpii vec = move_p[mask][m];
-                    for(int k = 0; k < (int)vec.size(); ++k)
-                        cerr << "{" << vec[k].x << " " << vec[k].y << "}, ";
-                    cerr << endl;
-                    dbg(mp(move_p[mask][m], next_mask).y);
-                    dbg(prev[mask].y);
-                    dbg(next_mask);
-                    dbg(MASK);
-                    prev[mask] = mp(move_p[mask][m], next_mask);
-                    dbg(prev[mask].y);
-                    dbg("done");
+                    cprev[mask] = next_mask;
                 }
             }
         }
@@ -89,7 +75,6 @@ int rec(int mask) {
     else {
         ret = 0;   
     }
-    dbg("rec end");
     return ret;
 }
 void bits(int t[MAX_N], int &size, int &mask) {
@@ -123,15 +108,18 @@ int dfs(int v) {
     }
     return 0;
 }
-char can(int t[], int size, int mask, vpii &pairs) {
+char can(int t[], int size, int mask, vector<pair<char,char> > &pairs) {
     memset(mt, -1, sizeof mt);
     memset(ri,  0, sizeof ri);
     int bits = 0;
-    for(int i = 0; i < mask; ++i)
+    for(int i = 0; i < n; ++i)
         if(mask & (1<<i)) {
             ri[i] = 1;
             ++bits;
         }
+    for(int i = 0; i < size; ++i)
+        if(ri[t[i]])
+            return 0;
     int ret = 0;
     for(int i = 0; i < size; ++i) {
         memset(was, 0, sizeof was);
@@ -158,29 +146,30 @@ int main() {
         g[idx2].insert(idx1);
     }
     int t[MAX_N], size;
+    string sroot;
+    cin >> sroot;
+    int root = get_idx(sroot);
+    
+    int mask = ((1 << n) - 1) ^ (1 << root);
     for(int i = 0; i < MASK; ++i) {
         bits(t, size, i);
         for(int j = 0; j < MASK; ++j) {
-            vpii vec;
-            //dbg(i);
-            //dbg(j);
-            move[i][j] = can(t, size, j, vec);
-            move_p[i][j] = vec;
-            //for(int k = 0; k < (int)vec.size(); ++k)
-            //    cerr << "{" << vec[k].x << " " << vec[k].y << "}, ";
-            //cerr << endl;
+            vector<pair<char,char> > vec;
+            cmove[i][j] = can(t, size, j, vec);
         }
     }
     memset(dp, -1, sizeof dp);
-    cout << rec((1<<n) - 2) << endl;
-    dbg("OK");
-    int mask = (1<<n) - 2;
+    cout << rec(mask) << endl;
     while(mask) {
-        vpii v = prev[mask].x;
+        int m = cprev[mask] ^ mask;
+        vector<pair<char, char> > vec;
+        bits(t, size, mask);
+        vector<pair<char,char> > v;
+        can(t, size, m, v);
         cout << v.size() << endl;
         for(int i = 0; i < (int)v.size(); ++i)
             cout << get_name(v[i].x) << " " << get_name(v[i].y) << endl;
-        mask = prev[mask].y;
+        mask = cprev[mask];
     }
     return 0;
 }
