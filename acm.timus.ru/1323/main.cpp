@@ -26,8 +26,8 @@ typedef vector<pii> vpii;
 #define mp make_pair
 #define pb push_back
 #define dbg( x ) { cerr << #x << "=" << x << endl; }
-#define dbgv( v ) { cerr << #v << "={";for( int I=0;I<(int)(v).size();++I)cerr << " " << (v)[i];cerr<<" }\n"; }
-#define dbgm( v, n ) { cerr << #v << "={";for( int I=0;I<n;++I)cerr << " " << (v)[i];cerr<<" }\n"; }
+#define dbgv( v ) { cerr << #v << "={";for( int I=0;I<(int)(v).size();++I)cerr << " " << (v)[I];cerr<<" }\n"; }
+#define dbgm( v, n ) { cerr << #v << "={";for( int I=0;I<n;++I)cerr << " " << (v)[I];cerr<<" }\n"; }
 
 const int INF = 1 << 29;
 const int MAX_N = 10;
@@ -68,7 +68,20 @@ int rec(int mask) {
                 int f = rec(next_mask) + 1;
                 if(f < ret) {
                     ret = f;
+                    dbg("try");
+                    dbg(mask);
+                    dbg(m);
+                    vpii vec = move_p[mask][m];
+                    for(int k = 0; k < (int)vec.size(); ++k)
+                        cerr << "{" << vec[k].x << " " << vec[k].y << "}, ";
+                    cerr << endl;
+                    dbg(mp(move_p[mask][m], next_mask).y);
+                    dbg(prev[mask].y);
+                    dbg(next_mask);
+                    dbg(MASK);
                     prev[mask] = mp(move_p[mask][m], next_mask);
+                    dbg(prev[mask].y);
+                    dbg("done");
                 }
             }
         }
@@ -76,6 +89,7 @@ int rec(int mask) {
     else {
         ret = 0;   
     }
+    dbg("rec end");
     return ret;
 }
 void bits(int t[MAX_N], int &size, int &mask) {
@@ -84,21 +98,51 @@ void bits(int t[MAX_N], int &size, int &mask) {
         if(!(mask & (1 << i)))
             t[size++] = i;
 }
-char can(int t[], int size, int mask, vpii &pairs) {
-    for(int i = 0; i < n; ++i) 
-        if(mask & (1<<i)) {
-            int found = 0;
-            for(int j = 0; j < size; ++j) {
-                int v = t[j];
-                if(g[v].find(i) != g[v].end()) {
-                    pairs.pb(mp(v, i));
-                    found = 1;
-                    break;
-                }
-            }
-            if(!found)
-                return 0;
+
+char was[MAX_N];
+char ri[MAX_N];
+char mt[MAX_N];
+
+int dfs(int v) {
+    if(was[v])
+        return 0;
+    was[v] = 1;
+    for(set<char> :: iterator it = g[v].begin(); it != g[v].end(); ++it) {
+        int u = *it;
+        if(ri[u] && mt[u] == -1) {
+            mt[u] = v;
+            return 1;
         }
+    }
+    for(set<char> :: iterator it = g[v].begin(); it != g[v].end(); ++it) {
+        int u = *it;
+        if(ri[u] && dfs(mt[u])) {
+            mt[u] = v;
+            return 1;
+        }
+    }
+    return 0;
+}
+char can(int t[], int size, int mask, vpii &pairs) {
+    memset(mt, -1, sizeof mt);
+    memset(ri,  0, sizeof ri);
+    int bits = 0;
+    for(int i = 0; i < mask; ++i)
+        if(mask & (1<<i)) {
+            ri[i] = 1;
+            ++bits;
+        }
+    int ret = 0;
+    for(int i = 0; i < size; ++i) {
+        memset(was, 0, sizeof was);
+        ret += dfs(t[i]);
+    }
+    if(ret != bits)
+        return 0;
+    pairs.reserve(bits);
+    for(int i = 0; i < n; ++i)
+        if(mt[i] != -1)
+            pairs.pb(mp(mt[i], i));
     return 1;
 }
 int main() {
@@ -122,10 +166,14 @@ int main() {
             //dbg(j);
             move[i][j] = can(t, size, j, vec);
             move_p[i][j] = vec;
+            //for(int k = 0; k < (int)vec.size(); ++k)
+            //    cerr << "{" << vec[k].x << " " << vec[k].y << "}, ";
+            //cerr << endl;
         }
     }
     memset(dp, -1, sizeof dp);
     cout << rec((1<<n) - 2) << endl;
+    dbg("OK");
     int mask = (1<<n) - 2;
     while(mask) {
         vpii v = prev[mask].x;
