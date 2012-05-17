@@ -31,7 +31,7 @@ typedef vector<pii> vpii;
 #define dbgm( v, n ) { cerr << #v << "={";for( int I=0;I<n;++I)cerr << " " << (v)[i];cerr<<" }\n"; }
 
 const int INF = 1 << 29;
-const int MAX_N = 16050; 
+const int MAX_N = 10500; 
 
 struct node_t {
     map<char,int> next;
@@ -150,22 +150,16 @@ const int MAX_WORDS_CNT = 10000;
 string words[MAX_WORDS_CNT];
 vector<string> text;
 
-int boards(int it, int &start, int &end, int n) {
-    int shift = n >> 3;
-    if(shift == 0) {
-        if(it == 0) {
-            start = 0;
-            end = n;
-            return 1;
-        }
-        else {
-            return 0;
-        }
+int board(int &start, int &end, int n) {
+    if(start == n)
+        return 0;
+    int size = 0;
+    end = start;
+    while(end < n && size + words[end].size() < (size_t)MAX_N) {
+        size += words[end].size();
+        ++end;
     }
-    start = shift * it;
-    end = start + shift;
-    end = min(end, n);
-    return start < n;
+    return 1;
 }
 
 clock_t _time;
@@ -193,15 +187,13 @@ int main() {
     text.resize(lines);
     for(int i = 0; i < lines; ++i)
         getline(cin, text[i]);
-    //dbg(n);
-    //dbg(lines);
     pii ret = mp(INF,INF);
-    int start, end;
-    for(int iter = 0; boards(iter, start, end, n); ++iter) {
+    int start = 0, end;
+    for(int iter = 0; board(start, end, n); ++iter) {
         init();
         for(;start < end; ++start)
             add_string(words[start]);
-        //ts();
+        start = end;
         for(int it = 0; it < lines; ++it) {
             string line = text[it];
             int root = 0;
@@ -219,7 +211,6 @@ int main() {
             if(found)
                 break;
         }
-        //dbg(te());
     }
 ptr:if(ret.x == INF && ret.y == INF)
         cout << "Passed\n";
