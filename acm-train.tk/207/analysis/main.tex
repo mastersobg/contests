@@ -1,0 +1,40 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel} 
+\usepackage{indentfirst} 
+\usepackage[dvips]{graphicx}
+
+\newcounter{taskcounter}
+\setcounter{taskcounter}{1}
+\newcommand{\task}{\section*{Задача \Alph{taskcounter}.\stepcounter{taskcounter}}}
+
+\usepackage{geometry} 
+\geometry{left=3.0cm}
+\geometry{right=1.5cm}
+\geometry{top=2.0cm}
+\geometry{bottom=2.0cm}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsthm}
+
+\title{Разбор задач}
+\author{Иван~Горбачев\\
+\small \texttt{gorbachev.ivan@gmail.com}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\task
+
+\task
+
+\task
+
+\end{document}
+
