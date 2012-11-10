@@ -4,4 +4,6 @@ main
 .project
 .settings
 bin
-
+.idea
+out
+*.iml
