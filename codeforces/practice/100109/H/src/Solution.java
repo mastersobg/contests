@@ -31,20 +31,16 @@ public class Solution {
 			lw[i] += lw[i - 1] + w[i];
 			lc[i] += lc[i - 1] + c[i];
 		}
-		int pos = calc(n - m - 1, lw[n - 1] - lw[n - m - 1]);
-		if (pos == -1) {
-			out.println("0 0");
-			return;
-		}
-		int ret = price(pos, 0);
-		int right = n, left = pos;
+
+		int ret = 0;
+		int right = n, left = 0;
 		int add = 0;
-		for (int i = n - 1; i >= m + 1; --i) {
-			add += c[i];
-			pos = calc(i - m - 1, i - m - 1 >= 0 ? lw[i - 1] - lw[i - m - 1]
-					: lw[i - 1]);
+		for (int i = n; i >= m + 1; --i) {
+			if (i < n)
+				add += c[i];
+			int pos = calc(i - m - 1, lw[i - 1] - lw[i - m - 1]);
 			if (pos == -1)
-				continue;
+				break;
 			int pr = price(pos, add);
 			if (pr > ret) {
 				ret = pr;
@@ -64,7 +60,7 @@ public class Solution {
 	}
 
 	int calc(int last, int w) {
-		int l = 0, r = last;
+		int l = 0, r = last + 1;
 		while (l + 1 < r) {
 			int mid = (l + r) >> 1;
 			if (can(last, mid, w))
@@ -72,8 +68,6 @@ public class Solution {
 			else
 				r = mid;
 		}
-		if (can(last, r, w))
-			return r;
 		if (can(last, l, w))
 			return l;
 		return -1;
