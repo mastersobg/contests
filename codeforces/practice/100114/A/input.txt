@@ -1,0 +1,8 @@
+10
+ABBBBBBBBB
+
+3
+CAB
+
+3
+ACB
