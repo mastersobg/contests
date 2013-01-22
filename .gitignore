@@ -8,3 +8,5 @@ bin
 out
 *.iml
 .DS_Store
+*.class
+*.bak
