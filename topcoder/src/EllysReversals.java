@@ -6,6 +6,7 @@ import static java.lang.Math.*;
 
 public class EllysReversals {
     public int getMin(String[] words) {
+    	return 0;
     }
 
 // BEGIN CUT HERE
