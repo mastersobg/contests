@@ -9,22 +9,25 @@ public class Solution {
 	StringTokenizer st;
 	PrintWriter out;
 
-	int letters, length;
-	long[][] dp;
+	final int MAX_PRECALC_LENGTH = 45;
+	final int MOD = 100000007;
 
-	long rec(int let, int pos) {
-		long ret = dp[let][pos];
+	int letters, length;
+	int[][] dp;
+
+	int rec(int let, int pos) {
+		int ret = dp[let][pos];
 		if (ret == -1) {
-			if (pos == length)
-				ret = 1l;
+			if (pos == 0)
+				ret = 1;
 			else {
 				ret = 0;
 				for (int i = let; i <= letters; ++i) {
 					if (2 * i > letters) {
-						ret += rec(1, pos + 1);
+						ret = (ret + rec(1, pos - 1)) % MOD;
 					} else {
 						if (pos + 1 < length) {
-							ret += rec(2 * i, pos + 1);
+							ret = (ret + rec(2 * i, pos - 1)) % MOD;
 						}
 					}
 				}
@@ -34,31 +37,46 @@ public class Solution {
 		return ret;
 	}
 
+	int[] gauss(int[][] arr) {
+		return null;
+	}
+
 	void solve() throws IOException {
-		// letters = ni();
-		// length = ni();
-		for (letters = 1; letters <= 10; ++letters) {
-			for (length = 1; length < 10; ++length) {
-				dp = new long[letters + 1][length + 1];
-				for (int i = 0; i < dp.length; i++) {
-					Arrays.fill(dp[i], -1);
-				}
-				long ret = 0;
-				ret += rec(1, 0);
-				out.println("letters=" + letters + " length=" + length
-						+ " ret=" + ret);
-			}
-			out.println();
+		letters = ni();
+		length = ni();
+		dp = new int[letters + 1][MAX_PRECALC_LENGTH];
+		for (int i = 0; i < dp.length; i++) {
+			Arrays.fill(dp[i], -1);
 		}
+		final int EQUATIONS_COUNT = 19;
+		int[][] arr = new int[EQUATIONS_COUNT][EQUATIONS_COUNT + 1];
+		for (int i = 0; i < EQUATIONS_COUNT; ++i) {
+			int idx = 20 + i;
+			for (int j = 0; j < EQUATIONS_COUNT; ++j) {
+				arr[i][j] = rec(letters, idx - j - 1);
+			}
+			arr[i][EQUATIONS_COUNT] = rec(letters, idx);
+		}
+		int[] ret = gauss(arr);
+		int[] d = new int[length + 1];
+		for (int i = 1; i < MAX_PRECALC_LENGTH && i <= length; ++i)
+			d[i] = rec(letters, i);
+		for (int i = MAX_PRECALC_LENGTH; i <= length; ++i) {
+			for (int j = 0; j < EQUATIONS_COUNT; ++j) {
+				int sum = (d[i - j - 1] * ret[j]) % MOD;
+				d[i] = (d[i] + sum) % MOD;
+			}
+		}
+		out.println(d[length]);
 	}
 
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
 		in = new BufferedReader(new InputStreamReader(System.in));
 		out = new PrintWriter(System.out);
-		// for (int t = ni(); t > 0; --t) {
-		solve();
-		// }
+		for (int t = ni(); t > 0; --t) {
+			solve();
+		}
 		in.close();
 		out.close();
 	}
