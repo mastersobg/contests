@@ -6,6 +6,7 @@ import static java.lang.Math.*;
 
 public class TheMountain {
     public int minSum(int n, int m, int[] rowIndex, int[] columnIndex, int[] element) {
+    	return 0;
     }
 
 // BEGIN CUT HERE
