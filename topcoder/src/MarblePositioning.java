@@ -27,18 +27,7 @@ public class MarblePositioning {
         pos[0] = 0;
         for(int it = 1; it < rad.length; ++it) {
             pos[it] = can(it, 0.0, pos, rad);
-/*            double l = pos[it - 1];
-            double r = 1e+20;
-            for(int i = 0; i < 10000; ++i) {
-                double mid = (r + l) / 2.0;
-                if(can(it, mid, pos, rad)) {
-                    r = mid;
-                } else {
-                    l = mid;
-                }
-            }
-            pos[it] = r;
-  */      }
+        }
         double ret = pos[rad.length - 1] - pos[0];
         dbg("pos=", Arrays.toString(pos));
         dbg("ret=", ret);
@@ -48,32 +37,12 @@ public class MarblePositioning {
     double can(int idx, double cur, double []pos, int []r) {
         double mx = 0.0;
         for(int i = 0; i < idx; ++i) {
-            double dx = pos[i] + 2.0 * sqrt((double) r[idx] * (double) r[i]);
-//            double dx = sqrt(sqr(r[idx] + r[i]) - sqr(r[idx] - r[i] + 0.0));
+            double dx = pos[i] + 2.0 * sqrt((double)r[idx] * (double)r[i]);
             mx = max(mx, dx);
-/*            double d = dist(pos[i], r[i], cur, r[idx]);
-            if(less(d, sqr(r[i] + r[idx]))) {
-                return false;
-            }
-*/
         }
         return mx;
     }
-
-    boolean equals(double a, double b) {
-        return abs(a - b) <= 1e-20;
-    }
-    boolean less(double a, double b) {
-        return a < b && !equals(a, b);
-    }
-
-    double dist(double x1, double y1, double x2, double y2) {
-        return sqr(x1 - x2) + sqr(y1 - y2);
-    }
-    double sqr(double x) {
-        return x * x;
-    }
-
+    
     public double totalWidth(int[] r) {
         return rec(0, r, new int[r.length], new boolean[r.length]);
     }
