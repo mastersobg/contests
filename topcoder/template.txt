@@ -5,12 +5,24 @@ import java.io.*;
 import static java.lang.Math.*;
 
 public class $CLASSNAME$ {
+
+
     public $RC$ $METHODNAME$($METHODPARMS$) {
+    }
+    
+    static boolean DEBUG = false;
+    void dbg(Object ...args) {
+        if(!DEBUG)
+            return ;
+        for(Object o : args)
+            System.err.print(o + " ");
+        System.err.println();
     }
 $WRITERCODE$
 $BEGINCUT$
     public static void main(String[] args) {
         try {
+            DEBUG = true;
 $MAINBODY$
         } catch( Exception exx) {
             System.err.println(exx);
