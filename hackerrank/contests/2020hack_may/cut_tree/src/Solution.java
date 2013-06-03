@@ -36,9 +36,7 @@ public class Solution {
 		long[][] dp = new long[n][k + 1];
 		for (int i = 0; i < dp.length; ++i)
 			Arrays.fill(dp[i], -1l);
-		
-		for(int i = 0; i <= k; ++i)
-			ret += f(0, i, list, dp);
+		ret += f(0, k, list, dp);
 		return ret;
 	}
 
@@ -86,7 +84,8 @@ public class Solution {
 			Arrays.fill(dp[i], -1l);
 		long ret = 0;
 		for (int i = 0; i < n; ++i) {
-			ret += rec(i, k);
+			for (int j = 0; j <= (i == 0 ? k : k - 1); ++j)
+				ret += rec(i, j);
 		}
 		out.println(ret + 1);
 	}
