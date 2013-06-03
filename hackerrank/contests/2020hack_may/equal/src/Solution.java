@@ -26,29 +26,25 @@ public class Solution {
     int ret;
 	void solve() throws IOException {
         int n = ni();
-        TreeSet<Pair> set = new TreeSet<Pair>();
+        int []v = new int[n];
         for(int i = 0; i < n; ++i) {
-            Pair p = new Pair();
-            p.idx = i;
-            p.value = ni();
-            set.add(p);
+            v[i] = ni();
         }
         if (n == 0) {
             out.println(0);
             return ;
         }
-        ret = 0;
-        while(true) {
-            Pair first = set.first();
-            Pair last = set.last();
-//            dbg("first=", first, "last=", last);
-            if(first.value == last.value)
-                break;
-            set.remove(last);
-            last.value = sub(first.value, last.value);
-            set.add(last);
+        Arrays.sort(v);
+        int first = v[0];
+        int best = 1 << 29;
+        for(int it = first - 5 ; it <= first; ++it) {
+            ret = 0;
+            for(int i = 0; i < n; ++i) {
+                sub(it, v[i]);
+            }
+            best = min(ret, best);
         }
-        out.println(ret);
+        out.println(best);
 	}
     int sub(int a, int b) {
         int dx = b - a;
