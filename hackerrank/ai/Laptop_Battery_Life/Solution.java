@@ -15,46 +15,10 @@ public class Solution {
     }
 
 	void solve() throws IOException {
-        double[][] arr = loadData();
-        double maxBatTime = 0.0;
-        for (double[] a : arr) {
-            maxBatTime = max(maxBatTime, a[1]);
-        }
-        double minChargeTime = 1e+20;
-        for (double[] a : arr) {
-            if (eq(a[1], maxBatTime)) {
-                minChargeTime = min(minChargeTime, a[0]);
-            }
-        }
-        System.err.println(maxBatTime + " " + minChargeTime);
-        double frac = maxBatTime / minChargeTime;
-        String line = null;
-        while((line = console.in.readLine()) != null) {
-            double time = Double.valueOf(line);
-            double ret = frac * time;
-            out.printf("%.2f\n", ret);
-            out.flush();
-        }
+        double value = console.nd();
+        double ret = min(8.0, 2 * value);
+        out.println(ret);
 	}
-
-    double[][] loadData() throws IOException {
-        List<double[]> values = new ArrayList<double[]>();
-        String line = null;
-        while((line = file.in.readLine()) != null) {
-            String []arr = line.split(",");
-            double []pair = new double[2];
-            pair[0] = Double.valueOf(arr[0]);
-            pair[1] = Double.valueOf(arr[1]);
-            values.add(pair);
-        }
-        double [][]ret = new double[values.size()][];
-        int idx = 0;
-        for (double []a : values) {
-            ret[idx++] = a;
-        }
-        return ret;
-    }
-
 
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
