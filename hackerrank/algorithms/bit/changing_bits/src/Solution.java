@@ -9,14 +9,26 @@ public class Solution {
 	StringTokenizer st;
 	PrintWriter out;
 
-	int[] a, b, ret;
+	long[] a, b, ret;
+
+    final static int SIZE = 64;
+    final static long ONES;
+
+    static {
+        long ret = 1;
+        for (int i = 1; i < SIZE; ++i) {
+            ret <<= 1L;
+            ret += 1L;
+        }
+        ONES = ret;
+    }
 
 	void solve() throws IOException {
 		int n = ni();
 		int q = ni();
 		a = read(n);
 		b = read(n);
-		ret = add(a, b);
+		ret = add(a, b, n);
 		for (int it = 0; it < q; ++it) {
 			String s = ns();
 			if ("set_a".equals(s)) {
@@ -31,84 +43,122 @@ public class Solution {
 			}
 			if ("get_c".equals(s)) {
 				int idx = ni();
-				out.print(ret[idx]);
+				out.print(getBit(ret, idx / SIZE, idx % SIZE));
 			}
+/*            dbg("a=", Arrays.toString(a));
+            dbg("b=", Arrays.toString(b));
+            dbg("ret=", Arrays.toString(ret));
+            dbg();
+            */
 		}
 		out.println();
 	}
-	void set(int[] a, int[] b, int idx, int bit) {
-		if (a[idx] == bit) {
+	void set(long[] a, long[] b, int pos, int value) {
+        int idx = pos / SIZE;
+        int bit = pos % SIZE;
+		if (getBit(a, idx, bit) == value) {
 			return;
 		}
-		if (bit == 0) {
-			if (b[idx] == 0) {
-				if (ret[idx] == 1) {
-					ret[idx] = 0;
+		if (value == 0) {
+			if (getBit(b, idx, bit) == 0) {
+				if (getBit(ret, idx, bit) == 1) {
+                    setBit(ret, idx, bit, 0);
 				} else {
-					int cur = idx;
-					while (ret[cur] == 0) {
-						ret[cur] = 1;
-						++cur;
-					}
-					ret[cur] = 0;
+                    find(ret, pos, 1);
 				}
 			} else {
-				int cur = idx;
-				while (ret[cur] == 0) {
-					ret[cur] = 1;
-					++cur;
-				}
-				ret[cur] = 0;
+                find(ret, pos, 1);
 			}
 		} else {
-			if (b[idx] == 0) {
-				if (ret[idx] == 1) {
-					int cur = idx;
-					while (ret[cur] == 1) {
-						ret[cur] = 0;
-						++cur;
-					}
-					ret[cur] = 1;
+			if (getBit(b, idx, bit) == 0) {
+				if (getBit(ret, idx, bit) == 1) {
+                    find(ret, pos, 0);
 				} else {
-					ret[idx] = 1;
+                    setBit(ret, idx, bit, 1);
 				}
 			} else {
-				int cur = idx;
-				while (ret[cur] == 1) {
-					ret[cur] = 0;
-					++cur;
-				}
-				ret[cur] = 1;
+                find(ret, pos, 0);
 			}
 		}
-		a[idx] = bit;
+        setBit(a, idx, bit, value);
 	}
 
-	int[] read(int n) throws IOException {
-		int[] ret = new int[n];
+    void find(long []a, int pos, int value) {
+        int idx = pos / SIZE;
+        int bit = pos % SIZE;
+        for (int i = bit; i < SIZE; ++i) {
+            if (getBit(a, idx, i) == value) {
+                setBit(a, idx, i, rev(value));
+                return ;
+            }
+            setBit(a, idx, i, value);
+        }
+        
+        for(int i = idx + 1;; ++i) {
+            if (value == 0) {
+                if (a[i] != ONES) {
+                    idx = i;
+                    break;
+                }
+                a[i] = 0;
+            } else {
+                if (a[i] != 0) {
+                    idx = i;
+                    break;
+                }
+                a[i] = ONES;
+            }
+        }
+
+        for (int i = 0; ; ++i) {
+            if (getBit(a, idx, i) == value) {
+                setBit(a, idx, i, rev(value));
+                return ;
+            }
+            setBit(a, idx, i, value);           
+        }
+    }
+    int rev(int value) {
+        return value == 0 ? 1 : 0;
+    }
+
+	long[] read(int n) throws IOException {
+		long[] ret = new long[n / SIZE + (n % SIZE != 0 ? 1 : 0)];
 		String s = ns();
 		for (int i = 0; i < s.length(); ++i)
-			ret[i] = s.charAt(s.length() - i - 1) - '0';
+            setBit(ret, i, s.charAt(s.length() - i - 1) - '0');
 		return ret;
 	}
 
-	int[] add(int[] a, int[] b) {
+    int getBit(long []a, int idx, int bit) {
+        return (a[idx] & (1l << (long) bit)) != 0 ? 1 : 0;
+    }
+
+    void setBit(long []a, int pos, int value) {
+        setBit(a, pos / SIZE, pos % SIZE, value);
+    }
+
+    void setBit(long []a, int idx, int bit, int value) {
+        if (value == 0) 
+            a[idx] &= ~(1l << (long) bit);
+        else
+            a[idx] |= (1l << (long) bit);
+    }
+
+	long[] add(long[] a, long[] b, int n) {
 		int mx = max(a.length, b.length);
 		int mn = min(a.length, b.length);
-		int[] ret = new int[mx + 1];
+		long[] ret = new long[mx + 1];
 		int carry = 0;
-		for (int i = 0; i < mn; ++i) {
-			carry += a[i] + b[i];
-			ret[i] = carry % 2;
-			carry /= 2;
-		}
-		for (int i = mn; i < mx; ++i) {
-			carry += (mn == a.length ? b[i] : a[i]);
-			ret[i] = carry % 2;
+		for (int i = 0; i < n; ++i) {
+            int idx = i / SIZE;
+            int bit = i % SIZE;
+			carry += getBit(a, idx, bit) + getBit(b, idx, bit);
+            setBit(ret, i, carry % 2);
 			carry /= 2;
 		}
 		if (carry != 0)
-			ret[ret.length - 1] = carry;
+            setBit(ret, n, carry);
 		return ret;
 	}
 
