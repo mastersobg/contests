@@ -11,8 +11,8 @@ public class Solution {
 
     class Node {
         Node l, r;
-
-        TreeSet<Integer> idx = new TreeSet<Integer> ();
+        int []idx = new int[16];
+        int len;
 
         Node next(boolean next) {
             return next ? r : l;
@@ -27,6 +27,18 @@ public class Solution {
             else
                 l = new Node();
         }
+        void add(int value) {
+            if (len == idx.length) {
+                int []newIdx = new int[len * 2];
+                System.arraycopy(idx, 0, newIdx, 0, len);
+                idx = newIdx;
+            }
+            idx[len++] = value;
+        }
+
+        void sort() {
+            Arrays.sort(idx, 0, len);
+        }
     }
 
     void add(Node root, int value, int idx) {
@@ -36,10 +48,17 @@ public class Solution {
                 root.create(bit);
             }
             root = root.next(bit);
-            root.idx.add(idx);
+            root.add(idx);
         }
     }
 
+    void dfs(Node root) {
+        if (root.l != null)
+            dfs(root.l);
+        if (root.r != null)
+            dfs(root.r);
+        Arrays.sort(root.idx, 0, root.len);
+    }
     boolean getBit(int value, int bit) {
         return (value & (1 << bit)) != 0;
     }
@@ -57,8 +76,8 @@ public class Solution {
                 root = root.next(!bit);
             } else {
                 Node next = root.next(bit);
-                Integer p = next.idx.floor(r);
-                if (p == null || p < l) {
+                int pos = pos(next, r);
+                if (pos < 0 || next.idx[pos] < l) {
                     ret = setBit(ret, i, !bit);
                     root = root.next(!bit);
                 } else {
@@ -70,6 +89,11 @@ public class Solution {
         return ret;
     }
 
+    int pos(Node node, int v) {
+        int p = Arrays.binarySearch(node.idx, 0, node.len, v);
+        return p >= 0 ? p : (-p - 2);
+    }
+
 	void solve() throws IOException {
         int n = ni();
         int q = ni();
@@ -79,6 +103,7 @@ public class Solution {
             int value = ni();
             add(root, value, i);
         }
+        dfs(root);
         System.err.println("build=" + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
         for (int it = 0; it < q; ++it) {
@@ -93,8 +118,10 @@ public class Solution {
 
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
-		in = new BufferedReader(new FileReader("input.txt"));
-		out = new PrintWriter("out");
+//		in = new BufferedReader(new FileReader("input.txt"));
+//		out = new PrintWriter("out");
+        in = new BufferedReader(new InputStreamReader(System.in));
+        out = new PrintWriter(System.out);
         long start = System.currentTimeMillis();
         for (int t = ni(); t > 0; --t) {
 		    solve();
