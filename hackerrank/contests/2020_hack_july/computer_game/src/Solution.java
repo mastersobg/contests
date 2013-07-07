@@ -13,6 +13,8 @@ public class Solution {
   int []primes;
   ArrayList<Integer> []arr;
   HashMap<Integer, List<Integer>> pr = new HashMap<Integer, List<Integer>>();
+  int []mt;
+  boolean []used, was;
 
 	void solve() throws IOException {
     primes = prime();
@@ -26,8 +28,76 @@ public class Solution {
     for (int i = 0; i < n; ++i) {
       factor(ni(), i, false);
     }
-
+    mt = new int[n];
+    used = new boolean[n];
+    was = new boolean[n];
+    Arrays.fill(mt, -1);
+    greedy();
+    int ret = kuhn();
+    out.println(ret);
 	}
+
+  int kuhn() {
+    int ret = 0;
+    for (int i = 0; i < n; ++i) {
+      if (used[i]) {
+        ++ret;
+      } else {
+        Arrays.fill(was, false);
+//        was = new boolean[n];
+        ret += dfs(i) ? 1 : 0;
+      }
+    }
+    return ret;
+  }
+
+
+  boolean dfs(int v) {
+    if (was[v])
+      return false;
+    was[v] = true;
+    List<Integer> list = arr[v];
+    for (int prime : list) {
+      List<Integer> other = pr.get(prime);
+      if (other == null)
+        continue;
+      for (int o : other) {
+        if (mt[o] == -1) {
+          mt[o] = v;
+          return true;
+        }
+      }
+    }
+    for (int prime : list) {
+      List<Integer> other = pr.get(prime);
+      if (other == null)
+        continue;
+      for (int o : other) {
+        if (dfs(mt[o])) {
+          mt[o] = v;
+          return true;
+        }
+      }
+    }       
+    return false;
+  }
+
+  void greedy() {
+    for (int i = 0; i < n; ++i) {
+      List<Integer> list = arr[i];
+gl : for (int prime : list) {
+        List<Integer> other = pr.get(prime);
+        if (other != null) {
+          for (int o : other)
+            if (mt[o] == -1) {
+              mt[o] = i;
+              used[i] = true;
+              break gl;
+            }
+        }
+      }
+    }
+  }
 
   int [] prime() {
     boolean []ret = new boolean[32000];
@@ -95,6 +165,14 @@ public class Solution {
     return prime2idx.get(prime);
   }
 
+  boolean DEBUG = true;
+    void dbg(Object ...args) {
+      if(!DEBUG)
+        return;
+      for(Object o : args)
+        System.err.print(o + " ");
+      System.err.println();
+    }
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
 		in = new BufferedReader(new InputStreamReader(System.in));
