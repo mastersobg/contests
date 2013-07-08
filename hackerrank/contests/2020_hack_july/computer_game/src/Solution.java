@@ -10,196 +10,94 @@ public class Solution {
 	PrintWriter out;
 
   int n;
-  int []primes;
-  ArrayList<Integer> []arr, pr;
+  int []b;
   ArrayList<Integer> []g;
 
-  int []mt;
-  boolean []used, was;
-  Timer timer = new Timer();
-
   void solve() throws IOException {
-    pr = new ArrayList[500000];
-    for (int i = 0; i < pr.length; ++i) 
-      pr[i] = new ArrayList<Integer> ();
-    timer.start();
-    primes = prime();
     n = ni();
-    arr = new ArrayList[n];
-    for (int i = 0; i < arr.length; ++i)
-      arr[i] = new ArrayList<Integer> (0);
+    int []primes= primes();
+    ArrayList<Integer> []next = new ArrayList[n];
+    for (int i = 0; i < n; ++i)
+      next[i] = new ArrayList<Integer> ();
     for (int i = 0; i < n; ++i) {
-      factor(ni(), i, true); 
+      next[i] = factor(ni(), primes);
     }
-    for (int i = 0; i < n; ++i) {
-      factor(ni(), i, false);
-    }
-    timer.print();
-    mt = new int[n];
-    used = new boolean[n];
-    was = new boolean[n];
+    b = new int[n];
+    for (int i = 0; i < n; ++i) 
+      b[i] = ni();
+    System.out.println("OK");
     g = new ArrayList[n];
+    boolean []was = new boolean[n];
     for (int i = 0; i < n; ++i) {
       g[i] = new ArrayList<Integer> ();
-    }
-    Arrays.fill(mt, -1);
-    timer.start();
-    greedy();
-    timer.print();
-    int ret = kuhn();
-    out.println(ret);
-    System.out.println();
-	}
-
-  int kuhn() {
-    int ret = 0;
-    for (int i = 0; i < n; ++i) {
-      if (used[i]) {
-        ++ret;
-      } else {
-        Arrays.fill(was, false);
-//        was = new boolean[n];
-        ret += dfs(i) ? 1 : 0;
+      Arrays.fill(was, false);
+      for (int o : next[i]) {
+        List<Integer> others = other(o);
+        for (int a : others) 
+        if (was[a] == false) {
+          g[i].add(a);
+          was[a] = true;
+        }
       }
     }
+    System.out.println(map.size());
+    System.out.println(Arrays.deepToString(g));
+	}
+
+  HashMap<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
+
+  List<Integer> other(int prime) {
+    if (map.containsKey(prime))
+      return map.get(prime);
+    ArrayList<Integer> ret = new ArrayList<Integer> ();
+    for (int i = 0; i < n; ++i) {
+      if (b[i] % prime == 0) {
+        ret.add(i);
+      }
+    }
+    map.put(prime, ret);
+    return ret;
+  }
+  int []primes() {
+    boolean []p = new boolean[32000];
+    p[0] = p[1] = true;
+    int cnt = 0;
+    for (int i = 2; i < p.length; ++i) {
+      if (!p[i]) {
+        ++cnt;
+        for (int j = i * i; j < p.length; j += i) 
+          p[j] = true;
+      }
+    }
+    int []ret = new int[cnt];
+    int size = 0;
+    for (int i = 0; i < p.length; ++i)
+      if (!p[i])
+        ret[size++] = i;
     return ret;
   }
 
-
-  boolean dfs(int v) {
-    if (was[v])
-      return false;
-    was[v] = true;
-    List<Integer> list = arr[v];
-/*    for (int prime : list) {
-      List<Integer> other = pr[prime];
-      for (int o : other) {
-        if (mt[o] == -1) {
-          mt[o] = v;
-          return true;
-        }
-      }
-    }
-    for (int prime : list) {
-      List<Integer> other = pr[prime];
-      for (int o : other) {
-        if (dfs(mt[o])) {
-          mt[o] = v;
-          return true;
-        }
-      }
-    }
-    */
-    for (int u : g[v]) {
-      if (mt[u] == -1) {
-        mt[u] = v;
-        return true;
-      }
-    }
-    for (int u : g[v]) {
-      if (dfs(mt[u])) {
-        mt[u] = v;
-        return true;
-      }
-    }
-    
-    return false;
-  }
-
-  void greedy() {
-    for (int i = 0; i < n; ++i) {
-      List<Integer> list = arr[i];
-gl : for (int prime : list) {
-        List<Integer> other = pr[prime];//pr.get(prime);
-        if (other != null) {
-          for (int o : other) {
-            if (mt[o] == -1 && !used[i]) {
-              mt[o] = i;
-              used[i] = true;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  int [] prime() {
-    boolean []ret = new boolean[32000];
-    ret[0] = ret[1] = true; 
-    int cnt = 0;
-    for (int i = 2; i < ret.length; ++i) {
-      if (ret[i] == false) {
-        ++cnt;
-        for (int j = i + i; j < ret.length; j += i)
-          ret[j] = true;
-      }
-    }
-    int []result = new int[cnt];
-    int size = 0;
-    for (int i = 0; i < ret.length; ++i)
-      if (!ret[i]) {
-        result[size++] = i;
-      }
-    return result;
-  }
-  void factor(int value, int pos, boolean flag) {
-    for (int idx = 0; idx < primes.length; ++idx) {
-      int a = primes[idx];
-      long other = (long) a * (long) a;
-      if (other > value) {
+  ArrayList<Integer> factor(int n, int []primes) {
+    ArrayList<Integer> ret = new ArrayList<Integer> ();
+    for (int i = 0; i < primes.length; ++i) {
+      int p = primes[i];
+      if (p * p > n) {
         break;
       }
-      if (value % a == 0) {
-        while (value % a == 0) {
-          value /= a;
+      if (n % p == 0) {
+        while (n % p == 0) {
+          n /= p;
         }
-        int index = getPrimeIdx(a);
-        if (flag) {
-          arr[pos].add(index);
-        } else {
-          pr[index].add(pos);
-//          addPr(index, pos);
-        }
+        ret.add(p);
       }
     }
-    if (value != 1) {
-      int index = getPrimeIdx(value);
-      if (flag) {
-        arr[pos].add(index);
-      } else {
-        pr[index].add(pos);
-//        addPr(index, pos);
-      }       
+    if (n != 1) {
+      ret.add(n);
     }
+    return ret;
   }
-
-  /*void addPr(int idx, int value) {
-    if (!pr.containsKey(idx)) {
-      pr.put(idx, new ArrayList<Integer>());
-    }
-    pr.get(idx).add(value);
-  }*/
-
-  HashMap<Integer, Integer> prime2idx = new HashMap<Integer, Integer> ();
-
-  int getPrimeIdx(int prime) {
-    if (!prime2idx.containsKey(prime)) {
-      int idx = prime2idx.size();
-      prime2idx.put(prime, idx);
-      return idx;
-    }
-    return prime2idx.get(prime);
-  }
-
-  boolean DEBUG = true;
-    void dbg(Object ...args) {
-      if(!DEBUG)
-        return;
-      for(Object o : args)
-        System.err.print(o + " ");
-      System.err.println();
-    }
-	public void run() throws IOException {
+	
+  public void run() throws IOException {
 		Locale.setDefault(Locale.US);
 //		in = new BufferedReader(new InputStreamReader(System.in));
     generate();
@@ -222,16 +120,6 @@ gl : for (int prime : list) {
       out.print((rnd.nextInt(999999999) + 2) + " ");
     }
     out.close();
-  }
-
-  class Timer {
-    long time;
-    void start() {
-      time = System.currentTimeMillis();
-    } 
-    void print() {
-      System.out.println("time=" + (System.currentTimeMillis() - time));
-    }
   }
 
 	String ns() throws IOException {
