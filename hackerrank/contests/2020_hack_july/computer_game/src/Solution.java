@@ -11,12 +11,18 @@ public class Solution {
 
   int n;
   int []primes;
-  ArrayList<Integer> []arr;
-  HashMap<Integer, List<Integer>> pr = new HashMap<Integer, List<Integer>>();
+  ArrayList<Integer> []arr, pr;
+  ArrayList<Integer> []g;
+
   int []mt;
   boolean []used, was;
+  Timer timer = new Timer();
 
-	void solve() throws IOException {
+  void solve() throws IOException {
+    pr = new ArrayList[500000];
+    for (int i = 0; i < pr.length; ++i) 
+      pr[i] = new ArrayList<Integer> ();
+    timer.start();
     primes = prime();
     n = ni();
     arr = new ArrayList[n];
@@ -28,13 +34,21 @@ public class Solution {
     for (int i = 0; i < n; ++i) {
       factor(ni(), i, false);
     }
+    timer.print();
     mt = new int[n];
     used = new boolean[n];
     was = new boolean[n];
+    g = new ArrayList[n];
+    for (int i = 0; i < n; ++i) {
+      g[i] = new ArrayList<Integer> ();
+    }
     Arrays.fill(mt, -1);
+    timer.start();
     greedy();
+    timer.print();
     int ret = kuhn();
     out.println(ret);
+    System.out.println();
 	}
 
   int kuhn() {
@@ -57,10 +71,8 @@ public class Solution {
       return false;
     was[v] = true;
     List<Integer> list = arr[v];
-    for (int prime : list) {
-      List<Integer> other = pr.get(prime);
-      if (other == null)
-        continue;
+/*    for (int prime : list) {
+      List<Integer> other = pr[prime];
       for (int o : other) {
         if (mt[o] == -1) {
           mt[o] = v;
@@ -69,16 +81,28 @@ public class Solution {
       }
     }
     for (int prime : list) {
-      List<Integer> other = pr.get(prime);
-      if (other == null)
-        continue;
+      List<Integer> other = pr[prime];
       for (int o : other) {
         if (dfs(mt[o])) {
           mt[o] = v;
           return true;
         }
       }
-    }       
+    }
+    */
+    for (int u : g[v]) {
+      if (mt[u] == -1) {
+        mt[u] = v;
+        return true;
+      }
+    }
+    for (int u : g[v]) {
+      if (dfs(mt[u])) {
+        mt[u] = v;
+        return true;
+      }
+    }
+    
     return false;
   }
 
@@ -86,14 +110,14 @@ public class Solution {
     for (int i = 0; i < n; ++i) {
       List<Integer> list = arr[i];
 gl : for (int prime : list) {
-        List<Integer> other = pr.get(prime);
+        List<Integer> other = pr[prime];//pr.get(prime);
         if (other != null) {
-          for (int o : other)
-            if (mt[o] == -1) {
+          for (int o : other) {
+            if (mt[o] == -1 && !used[i]) {
               mt[o] = i;
               used[i] = true;
-              break gl;
             }
+          }
         }
       }
     }
@@ -133,7 +157,8 @@ gl : for (int prime : list) {
         if (flag) {
           arr[pos].add(index);
         } else {
-          addPr(index, pos);
+          pr[index].add(pos);
+//          addPr(index, pos);
         }
       }
     }
@@ -142,17 +167,18 @@ gl : for (int prime : list) {
       if (flag) {
         arr[pos].add(index);
       } else {
-        addPr(index, pos);
+        pr[index].add(pos);
+//        addPr(index, pos);
       }       
     }
   }
 
-  void addPr(int idx, int value) {
+  /*void addPr(int idx, int value) {
     if (!pr.containsKey(idx)) {
       pr.put(idx, new ArrayList<Integer>());
     }
     pr.get(idx).add(value);
-  }
+  }*/
 
   HashMap<Integer, Integer> prime2idx = new HashMap<Integer, Integer> ();
 
@@ -175,12 +201,38 @@ gl : for (int prime : list) {
     }
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
-		in = new BufferedReader(new InputStreamReader(System.in));
+//		in = new BufferedReader(new InputStreamReader(System.in));
+    generate();
+    in = new BufferedReader(new FileReader("input.txt"));
 		out = new PrintWriter(System.out);
 		solve();
 		in.close();
 		out.close();
 	}
+
+  void generate() throws IOException {
+    PrintWriter out = new PrintWriter("input.txt");
+    out.println(100000);
+    Random rnd = new Random(12345L);
+    for (int i = 0; i < 100000; ++i) { 
+      out.print((rnd.nextInt(999999999) + 2) + " ");
+    }
+    out.println();
+    for (int i = 0; i < 100000; ++i) { 
+      out.print((rnd.nextInt(999999999) + 2) + " ");
+    }
+    out.close();
+  }
+
+  class Timer {
+    long time;
+    void start() {
+      time = System.currentTimeMillis();
+    } 
+    void print() {
+      System.out.println("time=" + (System.currentTimeMillis() - time));
+    }
+  }
 
 	String ns() throws IOException {
 		while (st == null || !st.hasMoreTokens())
