@@ -5,7 +5,7 @@ import static java.lang.Math.*;
 
 public class Solution {
 
-  static final boolean DEBUG = false;
+  static final boolean DEBUG = true;
 
 	BufferedReader in;
 	StringTokenizer st;
@@ -14,7 +14,7 @@ public class Solution {
   int n;
   int [][]n2p, p2n;
   HashMap<Integer, Integer> pId = new HashMap<Integer, Integer> ();
-  int []was, mt;
+  int []was, mt, pwas;
 
   void solve() throws IOException {
     Timer t = new Timer();
@@ -23,11 +23,11 @@ public class Solution {
     int []primes= primes();
     n2p = new int[n][];
     for (int i = 0; i < n; ++i) {
-      ArrayList<Integer> f = factor(ni(), primes);
-      n2p[i] = new int[f.size()];
-      int sz = 0;
-      for (int a : f) {
-        n2p[i][sz++] = a;
+      ArrayList<Integer> list = factor(ni(), primes);
+      n2p[i] = new int[list.size()];
+      Collections.shuffle(list);
+      for (int j = 0; j < list.size(); ++j) {
+        n2p[i][j] = list.get(j);
       }
     }
     int primeIdxs = pId.size();
@@ -37,8 +37,9 @@ public class Solution {
       tp2n[i] = new ArrayList<Integer> ();
     }
     for (int i = 0; i < n; ++i) {
-      ArrayList<Integer> f = factor(ni(), primes);
-      for (int a : f) {
+      ArrayList<Integer> list = factor(ni(), primes);
+      for (int j = 0; j < list.size(); ++j) {
+        int a = list.get(j);
         if (a < primeIdxs) {
           tp2n[a].add(i);
         }
@@ -54,16 +55,19 @@ public class Solution {
     }
     t.print();
     out.println(kuhn());
+    t.print();
 	}
 
   int kuhn() {
     was = new int[n];
+    pwas = new int[100000];
     mt = new int[n];
     Arrays.fill(mt, -1);
     int ret = 0;
-    for (int i = 0; i < n; ++i) {
-//      dbg(i);
-      if (dfs(i, i + 1)) {
+    int step = 1;
+    for (int i = n - 1; i >= 0; --i) {
+      if (dfs(i, step)) {
+        ++step;
         ++ret;
       }
     }
@@ -75,19 +79,29 @@ public class Solution {
       return false;
     was[v] = step;
     for (int prime : n2p[v]) {
-      for (int other : p2n[prime]) {
-        if (mt[other] == -1) {
-          mt[other] = v;
-          return true;
-        }
+      if (pdfs(v, prime, step)) {
+        return true;
       }
     }
-    for (int prime : n2p[v]) {
-      for (int other : p2n[prime]) {
-        if (dfs(mt[other], step)) {
-          mt[other] = v;
-          return true;
-        }
+    return false;
+  }
+
+  boolean pdfs(int s, int v, int step) {
+    if (pwas[v] == step) {
+      return false;
+    }
+    pwas[v] = step;
+    for (int other : p2n[v]) {
+      if (mt[other] == -1) {
+        mt[other] = s;
+        return true;
+      }
+    }
+    
+    for (int other : p2n[v]) {
+      if (dfs(mt[other], step)) {
+        mt[other] = s;
+        return true;
       }
     }
     return false;
@@ -133,8 +147,10 @@ public class Solution {
   }
 
   int getPrimeId(int prime) {
-    if (pId.containsKey(prime))
-      return pId.get(prime);
+    Integer idx = pId.get(prime);
+    if (idx != null) {
+      return idx;
+    }
     pId.put(prime, pId.size());
     return pId.size() - 1;
   }
@@ -143,7 +159,7 @@ public class Solution {
   void generate() throws IOException {
     PrintWriter out = new PrintWriter("input.txt");
     out.println(100000);
-    Random rnd = new Random(12345L);
+    Random rnd = new Random();
     for (int i = 0; i < 100000; ++i) { 
       out.print((rnd.nextInt(999999999) + 2) + " ");
     }
@@ -196,9 +212,7 @@ public class Solution {
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
 		in = new BufferedReader(new InputStreamReader(System.in));
-//    generate();
-//		in = new BufferedReader(new FileReader("input.txt"));    
-		out = new PrintWriter(System.out);
+  	out = new PrintWriter(System.out);
 		solve();
 		in.close();
 		out.close();
