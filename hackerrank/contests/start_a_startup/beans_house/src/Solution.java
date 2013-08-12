@@ -5,7 +5,7 @@ import static java.lang.Math.*;
 
 public class Solution {
 
-  static final boolean DEBUG = false;
+  static final boolean DEBUG = true;
 
 	BufferedReader in;
 	StringTokenizer st;
@@ -60,9 +60,6 @@ public class Solution {
       }
 */      if (l == lf && r == rg) {
         int []v = tree[idx];
-        if (v == null) {
-          return true;
-        }
         int pos = Arrays.binarySearch(v, y1);
         if (pos >= 0) {
           return !(pos + 1 < v.length && v[pos + 1] < y2);
@@ -149,6 +146,7 @@ public class Solution {
         System.exit(0);
       }
     }
+
 	}
 
   boolean check(int x, int y, int d) {
@@ -320,7 +318,10 @@ public class Solution {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new Solution().run();
+    while (true) {
+      dbg("new");
+		  new Solution().run();
+    }
 	}
 
   class Timer {
