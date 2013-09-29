@@ -12,3 +12,5 @@ out
 *.bak
 *.swp
 *.txt
+*.in
+*.out
