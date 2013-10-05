@@ -5,7 +5,7 @@ import static java.lang.Math.*;
 
 public class Solution {
 
-  static final boolean DEBUG = true;
+  static final boolean DEBUG = false;
 
 	BufferedReader in;
 	StringTokenizer st;
@@ -25,7 +25,7 @@ public class Solution {
         ++ones;
       }
     }
-    dbg("ret=", sol(fullString(new String(s), k), k));
+    //dbg("ret=", sol(fullString(new String(s), k), k));
     if (ones == 0) {
       out.println(0);
       return ;
@@ -36,23 +36,28 @@ public class Solution {
     }
     zeroes = ones = 0;
     first = findOnes(fullString(new String(s), 2));
+    int lastPositive = -1;
+    int sum = 0;
     for (int i = first;; ++i) {
       int idx = i % s.length;
       if (s[idx] == '0') {
-        ++zeroes;
+        sum -= 2;
       } else {
-        ++ones;
+        sum += 3;
       }
-      if (2 * zeroes > 3 * ones) {
-        dbg("i=", i);
-        out.println(i - first);
-        return ;
+      if (sum >= 0) {
+        lastPositive = i;
+      } else {
+        if (i - lastPositive == s.length) {
+          out.println(lastPositive - first + 1);
+          return ;
+        }
       }
-    }
+    } 
   }
 
   int findOnes(String s) {
-    dbg(s);
+    //dbg(s);
     int pos = -1;
     int maxLen = 0;
     int cnt = 0;
@@ -67,7 +72,7 @@ public class Solution {
         cnt = 0;
       }
     }
-    dbg("pos=", pos);
+    //dbg("pos=", pos);
     return pos;
   }
 
