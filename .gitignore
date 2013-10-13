@@ -14,3 +14,5 @@ out
 *.txt
 *.in
 *.out
+.idea
+
