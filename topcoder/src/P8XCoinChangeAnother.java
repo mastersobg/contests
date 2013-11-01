@@ -8,6 +8,7 @@ public class P8XCoinChangeAnother {
 
 
   public long[] solve(int N, long coins_sum, long coins_count) {
+      return null;
   }
 
   
