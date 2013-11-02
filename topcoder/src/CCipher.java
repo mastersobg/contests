@@ -8,6 +8,7 @@ public class CCipher {
 
 
   public String decode(String cipherText, int shift) {
+      return "";
   }
 
   
