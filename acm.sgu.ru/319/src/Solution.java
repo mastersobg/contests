@@ -191,52 +191,69 @@ public class Solution {
         events.add(new Event(0, 0, h, false, 0));
         events.add(new Event(w, 0, h, true, 0));
         long []volume = new long[n + 1];
-        TreeSet<Integer> set = new TreeSet<Integer>();
         volume[0] = (long) w * (long) h;
-        set.add(0);
-        set.add(h);
         for (int i = 0; i < n; ++i) {
             int x1 = ni(), y1 = ni();
             int x2 = ni(), y2 = ni();
-            set.add(y1);
-            set.add(y2);
             int xl = min(x1, x2), xr = max(x1, x2);
             int yl = min(y1, y2), yr = max(y1, y2);
             events.add(new Event(xl, yl, yr, false, i + 1));
             events.add(new Event(xr, yl, yr, true, i + 1));
             volume[i + 1] = (long) abs(xr - xl) * (long)(yr - yl);
         }
-        int []arrayY = new int[set.size()];
-        int ptr = 0;
-        for (int a : set)
-            arrayY[ptr++] = a;
-        t.start();
         Collections.sort(events);
-        t.print();
-//        dbg(events);
-        SegmentTree tree = new SegmentTree(set.size());
         ArrayList<Integer> []g = new ArrayList[n + 1];
         for (int i = 0; i <= n; ++i)
             g[i] = new ArrayList<Integer>();
-        t.start();
-        for (Event e : events) {
-            if (!e.type) {
-                int parent = tree.getParent(getId(arrayY, e.y1)) & 0xFFFF;
-//                dbg(e + " parent=" + parent);
-                if (parent != 61000)
-                    g[parent].add(e.id);
-                tree.add(getId(arrayY, e.y1), getId(arrayY, e.y2), e.id);
-            } else {
-                tree.clear(getId(arrayY, e.y1), getId(arrayY, e.y2));
+        TreeSet<SetNode> set = new TreeSet<SetNode>();
+        SetNode node = new SetNode();
+        int []parent = new int[n + 1];
+        for (Event e: events) {
+            if (e.type) {
+                set.remove(new SetNode(e.y1, e.id, 0, 0));
+                set.remove(new SetNode(e.y2, e.id, 0, 0));
+                continue;
             }
+            node.x = e.y1;
+            SetNode ret = set.lower(node);
+            if (ret != null) {
+                if (ret.l < e.y1 && e.y2 < ret.r) {
+                    g[ret.id].add(e.id);
+                    parent[e.id] = ret.id;
+                } else {
+                    parent[e.id] = parent[ret.id];
+                    g[parent[ret.id]].add(e.id);
+                }
+            }
+            set.add(new SetNode(e.y1, e.id, e.y1, e.y2));
+            set.add(new SetNode(e.y2, e.id, e.y1, e.y2));
+            
         }
-//        dbg(Arrays.deepToString(g));
+        
         List<Long> result = new ArrayList<Long>();
-        t.print();
         bfs(g, 0, volume, result);
         Collections.sort(result);
         for (long a : result)
             out.print(a + " ");
+    }
+
+    class SetNode implements Comparable<SetNode> {
+        int x;
+        int id;
+        int l, r;
+
+        SetNode(){}
+        SetNode(int x, int id, int l, int r) {
+            this.x = x;
+            this.id = id;
+            this.l = l;
+            this.r = r;
+        }
+
+        public int compareTo(SetNode o) {
+            if (x != o.x) return x - o.x;
+            return id - o.id;
+        }
     }
 
     int getId(int []arr, int y) {
