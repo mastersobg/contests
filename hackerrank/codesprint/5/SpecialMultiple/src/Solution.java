@@ -9,38 +9,41 @@ public class Solution {
 	StringTokenizer st;
 	PrintWriter out;
 
-	final long mod = 1000000007L;
+	final int MAX_LEN = 50;
 
-	long pow(long a, int pow) {
-		long ret = 1;
-		while (pow > 0) {
-			if ((pow & 1) == 1) {
-				ret = (ret * a) % mod;
-			}
-			a = (a * a) % mod;
-			pow >>= 1;
-		}
-		return ret;
-	}
+	String[][] dp;
 
 	void solve() throws IOException {
-		long[] fact = new long[2000001];
-		fact[0] = 1;
-		for (int i = 1; i < fact.length; ++i) {
-			fact[i] = (fact[i - 1] * i) % mod;
-		}
 		for (int t = ni(); t > 0; --t) {
-			int n = ni() - 1;
-			int m = ni() - 1;
-			n += m;
-			long a = fact[n];
-			long b = (fact[m] * fact[n - m]) % mod;
-			b = pow(b, (int) mod - 2);
-			a = (a * b) % mod;
-			out.println(a);
+			int n = ni();
+			dp = new String[MAX_LEN][n];
+			String ret = calc(n);
+			out.println(ret);
 		}
 	}
 
+	String calc(int n) {
+		if (9 % n == 0)
+			return "9";
+		dp[1][9 % n] = "9";
+		int[] arr = new int[] { 0, 9 };
+		for (int i = 1; i < MAX_LEN - 1; ++i) {
+			for (int j = 0; j < n; ++j) {
+				if (dp[i][j] != null) {
+					for (int k = 0; k < arr.length; ++k) {
+						int rest = (j * 10 + arr[k]) % n;
+						String next = dp[i][j] + arr[k];
+						if (dp[i + 1][rest] == null || dp[i + 1][rest].compareTo(next) > 0)
+						dp[i + 1][rest] = next;
+						if (rest == 0)
+							return next;
+					}
+				}
+			}
+		}
+		return "";
+	}
+	
 	public void run() throws IOException {
 		Locale.setDefault(Locale.US);
 		in = new BufferedReader(new InputStreamReader(System.in));
@@ -97,7 +100,7 @@ public class Solution {
 
 	}
 
-	static boolean DEBUG = true;
+	static boolean DEBUG = false;
 
 	void dbg(Object... objs) {
 		if (!DEBUG) {

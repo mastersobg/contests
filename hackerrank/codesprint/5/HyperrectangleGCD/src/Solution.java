@@ -9,36 +9,21 @@ public class Solution {
 	StringTokenizer st;
 	PrintWriter out;
 
-	final long mod = 1000000007L;
-
-	long pow(long a, int pow) {
-		long ret = 1;
-		while (pow > 0) {
-			if ((pow & 1) == 1) {
-				ret = (ret * a) % mod;
-			}
-			a = (a * a) % mod;
-			pow >>= 1;
-		}
-		return ret;
+	int gcd(int a, int b) {
+		return b == 0 ? a : gcd(b, a % b);
 	}
 
 	void solve() throws IOException {
-		long[] fact = new long[2000001];
-		fact[0] = 1;
-		for (int i = 1; i < fact.length; ++i) {
-			fact[i] = (fact[i - 1] * i) % mod;
-		}
-		for (int t = ni(); t > 0; --t) {
-			int n = ni() - 1;
-			int m = ni() - 1;
-			n += m;
-			long a = fact[n];
-			long b = (fact[m] * fact[n - m]) % mod;
-			b = pow(b, (int) mod - 2);
-			a = (a * b) % mod;
-			out.println(a);
-		}
+		int a = 0;
+		for (int i = 1; i <= 100; ++i)
+			for (int j = 1; j <= 100; ++j)
+				for (int k = 1; k <= 100; ++k)
+					for (int q = 1; q <= 100; ++q) {
+						int gcd = gcd(gcd(gcd(i, j), k), q);
+						if (gcd == 1)
+							++a;
+					}
+		out.println(a);
 	}
 
 	public void run() throws IOException {
@@ -97,7 +82,7 @@ public class Solution {
 
 	}
 
-	static boolean DEBUG = true;
+	static boolean DEBUG = false;
 
 	void dbg(Object... objs) {
 		if (!DEBUG) {
