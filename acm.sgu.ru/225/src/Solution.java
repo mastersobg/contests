@@ -14,6 +14,25 @@ public class Solution {
 
 	int n, k;
 	long[][][] dp;
+	int[][] move;
+	int[] tmp = new int[100000];
+
+	int[] precalc(int id) {
+		int size = 0;
+		int m1 = id2m[0][id];
+		int m2 = id2m[1][id];
+		int mask = m1 << 1 | m1 >> 1 | m2 << 2 | m2 >> 2;
+		for (int i = 0; i < (1 << n); ++i) {
+			if ((i & mask) == 0) {
+				tmp[size++] = i;
+			}
+		}
+		int[] ret = new int[size];
+		for (int i = 0; i < size; ++i) {
+			ret[i] = tmp[i];
+		}
+		return ret;
+	}
 
 	void solve() throws IOException {
 		n = ni();
@@ -23,16 +42,22 @@ public class Solution {
 		m2id = new int[1 << n][1 << n];
 		id2m = new int[2][30000];
 		int id = 0;
+		move = new int[30000][];
 		for (int m1 = 0; m1 < (1 << n); ++m1) {
 			for (int m2 = 0; m2 < (1 << n); ++m2) {
 				if (check(m1, m2)) {
 					m2id[m1][m2] = id;
 					id2m[0][id] = m1;
 					id2m[1][id] = m2;
+					move[id] = precalc(id);
 					++id;
 				}
 			}
 		}
+		int[] bits = new int[1 << n];
+		for (int i = 0; i < (1 << n); ++i)
+			bits[i] = Integer.bitCount(i);
+
 		dp = new long[2][k + 1][id];
 		dp[0][0][0] = 1L;
 		int cur = 0;
@@ -45,7 +70,16 @@ public class Solution {
 				for (int q = 0; q < id; ++q) {
 					if (dp[cur][j][q] > 0) {
 						was = true;
-						go(cur, next, j, q, 0, 0, 0);
+						for (int mv = 0; mv < move[q].length; ++mv) {
+							int m3 = move[q][mv];
+							int m2 = id2m[1][q];
+							int id1 = m2id[m2][m3];
+							if (j + bits[m3] <= k) {
+								dp[next][j + bits[m3]][id1] += dp[cur][j][q];
+							}
+						}
+
+						// go(cur, next, j, q, 0, 0, 0);
 					}
 				}
 			}
@@ -147,7 +181,7 @@ public class Solution {
 
 	}
 
-	static boolean DEBUG = true;
+	static boolean DEBUG = false;
 
 	void dbg(Object... objs) {
 		if (!DEBUG) {
