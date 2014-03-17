@@ -23,6 +23,23 @@ public class Program {
         n = ni();
         m = ni();
         k = ni();
+        // if (k == 1 && m <= n - 1 && n > 1) {
+        //     List<Edge> edges = new ArrayList<Edge> ();
+        //     int v = 2;
+        //     for (int i = 0; i < m; ++i) {
+        //         edges.add(new Edge(1, v++));
+        //     }
+        //     for (; v <= n;) {
+        //         edges.add(new Edge(1, v));
+        //         edges.add(new Edge(v++, 1));
+        //     }
+
+        //     out.println(edges.size());
+        //     for (Edge e : edges) {
+        //         out.println(e.v + " " + e.u);
+        //     }
+        //     return 0;
+        // }
         if (m == 0 && k == 0) {
             if (n == 0 || n == 1) {
                 out.println(0);
