@@ -9,10 +9,96 @@ public class Solution {
 	StringTokenizer st;
 	PrintWriter out;
 
-	void solve() throws IOException {
+	String []days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
+	int firstSeptember;
+	int contest;
+	int a, b;
+
+	void solve() throws IOException {
+		firstSeptember = getDayIdx(ns());
+		contest = getContest(ns(), ni());
+		dbg("con", contest);
+		dbg("first", firstSeptember);
+		a = ni();
+		b = ni();
+		int []days = new int[7];
+ 		for (int cnt = 1; cnt <= 7; ++cnt) {
+			if (rec(cnt, 0, days)) {
+				out.println(cnt);
+				for (int i = 0; i < cnt; ++i) {
+					out.println(this.days[days[i]]);
+				}
+				return ;
+			}
+		}
+		out.println("Impossible");
 	}
-	
+
+	boolean rec(int cnt, int idx, int []days) {
+		if (cnt == idx) {
+			int ret = count(days, cnt);
+			return a <= ret && ret <= b;
+		}
+
+		int last = idx == 0 ? 0 : days[idx - 1] + 1;
+		for (; last < 7; ++last) {
+			days[idx] = last;
+			if (rec(cnt, idx + 1, days)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	boolean []arr = new boolean[7];
+
+	int count(int []days, int cnt) {
+		Arrays.fill(arr, false);
+		for (int i = 0; i < cnt; ++i) {
+			arr[days[i]] = true;
+		}
+		int currentDay = (firstSeptember + 1) % 7;
+		int ret = 0;
+		for (int i = 1; i < contest; ++i) {
+			if (arr[currentDay]) {
+				++ret;
+			}
+			currentDay++;
+			if (currentDay == 7) {
+				currentDay = 0;
+			}
+		}
+		return ret;
+	}
+
+	int getDayIdx(String name) {
+		for (int i = 0; i < days.length; ++i) {
+			if (days[i].equals(name)) {
+				return i;
+			}
+		}
+		throw new RuntimeException();
+	}
+
+	int getContest(String month, int day) {
+		month = month.toLowerCase();
+		int []cnt = {30, 31, 30, 31};
+		String []names = {"september", "october", "november", "december"};
+		int ret = 0;
+		int mIdx = 0;
+		int dayN = 1;
+		while (!(names[mIdx].equals(month) && day == dayN)) {
+			++dayN;
+			if (dayN > cnt[mIdx]) {
+				dayN = 1;
+				mIdx++;
+			}
+			++ret;
+		}
+		return ret;
+	}
+
 	public Solution() throws IOException {
 		Locale.setDefault(Locale.US);
 		in = new BufferedReader(new InputStreamReader(System.in));
