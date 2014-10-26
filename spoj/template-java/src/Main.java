@@ -3,7 +3,7 @@ import java.util.*;
 
 import static java.lang.Math.*;
 
-public class Solution {
+public class Main {
 
 	BufferedReader in;
 	StringTokenizer st;
@@ -13,7 +13,7 @@ public class Solution {
 
 	}
 	
-	public Solution() throws IOException {
+	public Main() throws IOException {
 		Locale.setDefault(Locale.US);
 		in = new BufferedReader(new InputStreamReader(System.in));
 		out = new PrintWriter(System.out);
@@ -46,7 +46,7 @@ public class Solution {
 		if (args.length > 0 && args[0].equals("LOCAL_DEBUG")) {
 			DEBUG = true;
 		}
-		new Solution();
+		new Main();
 	}
 
 	class Timer {
