@@ -82,10 +82,19 @@ public class Main {
     }
 
     private boolean mult(int i, int j, int c) {
-        if (sign[i] == '*' && sign[j] == '*') {
-            return relax(d, d[i] + "*" + d[j], c + MAX, '*');
-        }
-        return relax(d, "[" + d[i] + "]*[" + d[j] + "]", c + MAX, '*');
+    	String left;
+    	String right;
+    	if (sign[i] == '*') {
+    		left = d[i];
+    	} else {
+    		left = "[" + d[i] + "]";
+    	}
+    	if (sign[j] == '*') {
+    		right = d[j];
+    	} else {
+    		right = "[" + d[j] + "]";
+    	}
+        return relax(d, left + "*" + right, c + MAX, '*');
     }
 
     private boolean sub(int i, int j, int c) {
