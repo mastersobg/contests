@@ -13,7 +13,7 @@ public class Graph {
     public Graph(int vertices) {
         edges = new ArrayList[vertices];
         for (int i = 0; i < vertices; i++) {
-            edges[i] = new ArrayList<>();
+            edges[i] = new ArrayList<Edge>();
         }
     }
 
@@ -26,10 +26,15 @@ public class Graph {
         return edges[vertex];
     }
 
-//    public Iterable<Integer> getAdjacentVertices(int vertex) {
-//        assertVertexIdx(vertex);
-//        return () -> new AdjVerticesIterator(edges[vertex]);
-//    }
+    public Iterable<Integer> getAdjacentVertices(final int vertex) {
+        assertVertexIdx(vertex);
+        return new Iterable<Integer>() {
+            @Override
+            public Iterator<Integer> iterator() {
+                return new AdjVerticesIterator(edges[vertex]);
+            }
+        };
+    }
 
     private void assertVertexIdx(int v) {
         if (v < 0 || v >= edges.length) {

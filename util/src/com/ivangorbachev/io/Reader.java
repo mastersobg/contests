@@ -52,7 +52,7 @@ public class Reader {
     }
 
     public List<Integer> readIntList(int size) {
-        List<Integer> ret = new ArrayList<>(size);
+        List<Integer> ret = new ArrayList<Integer>(size);
         for (int i = 0; i < size; i++) {
             ret.add(readInt());
         }

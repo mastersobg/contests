@@ -1,7 +1,6 @@
-import java.io.*;
-import java.util.*;
+package com.ivangorbachev;
 
-import static java.lang.Math.*;
+import com.ivangorbachev.util.Dbg;
 
 public class BearPaints {
     public long maxArea(int W, int H, long M) {
@@ -25,5 +24,4 @@ public class BearPaints {
 //        Dbg.dbg(x, y);
         return ret;
     }
-
 }
