@@ -1,0 +1,50 @@
+18 SubstitutionCipher
+6 decode
+16 java.lang.String
+3
+16 java.lang.String
+1 a
+16 java.lang.String
+1 b
+16 java.lang.String
+1 y
+3
+0
+3
+String
+3 CAT
+String
+3 DOG
+String
+3 GOD
+String
+3 TAC
+1
+1
+3
+String
+6 BANANA
+String
+6 METETE
+String
+4 TEMP
+String
+0 
+1
+2
+3
+String
+35 THEQUICKBROWNFOXJUMPSOVERTHELAZYHOG
+String
+35 UIFRVJDLCSPXOGPYKVNQTPWFSUIFMBAZIPH
+String
+25 DIDYOUNOTICESKIPPEDLETTER
+String
+25 CHCXNTMNSHBDRJHOODCKDSSDQ
+1
+10 2015.10.27
+17 TopCoder SRM #672
+0
+23 main.SubstitutionCipher
+0
+4 256M

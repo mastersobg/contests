@@ -1,0 +1,86 @@
+15 SetPartialOrder
+11 compareSets
+16 java.lang.String
+2
+5 int[]
+1 a
+5 int[]
+1 b
+4
+0
+2
+int[] 5
+1
+2
+3
+5
+8
+int[] 5
+8
+5
+1
+3
+2
+String
+5 EQUAL
+1
+1
+2
+int[] 4
+2
+3
+5
+7
+int[] 10
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+String
+4 LESS
+1
+2
+2
+int[] 8
+2
+4
+6
+8
+10
+12
+14
+16
+int[] 4
+2
+4
+8
+16
+String
+7 GREATER
+1
+3
+2
+int[] 3
+42
+23
+17
+int[] 3
+15
+23
+31
+String
+12 INCOMPARABLE
+1
+10 2015.10.27
+17 TopCoder SRM #672
+1
+28 main.SetPartialOrderTestCase
+20 main.SetPartialOrder
+0
+4 256M
