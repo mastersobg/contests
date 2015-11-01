@@ -30,4 +30,9 @@ public class AdjVerticesIterator implements Iterator<Integer> {
         }
         return edges.get(idx++).getTo();
     }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

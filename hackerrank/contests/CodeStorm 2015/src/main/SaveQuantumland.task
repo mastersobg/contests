@@ -1,0 +1,31 @@
+15 SaveQuantumland
+12 MULTI_NUMBER
+8 STANDARD
+9 input.txt
+8 STANDARD
+10 output.txt
+1
+0
+26 2
+5
+1 1 0 1 0
+5
+0 0 1 0 0
+
+3 0
+2
+1
+8 src/main
+16 -Xmx256m -Xss64m
+4 Main
+20 main.SaveQuantumland
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.10.29
+14 CodeStorm 2015
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+1

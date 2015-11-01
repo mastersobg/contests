@@ -12,4 +12,12 @@ public class BitsUtil {
     public static int setBit(int number, int bit) {
         return number | (1 << bit);
     }
+
+    public static boolean isOdd(int number) {
+        return (number & 1) == 1;
+    }
+
+    public static boolean isEven(int number) {
+        return (number & 1) == 0;
+    }
 }

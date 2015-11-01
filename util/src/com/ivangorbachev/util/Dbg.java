@@ -7,7 +7,20 @@ import java.util.Arrays;
  */
 public class Dbg {
 
+    private static boolean DEBUG_ENABLED;
+
+    static {
+        try {
+            DEBUG_ENABLED = System.getProperty("LOCAL_DEBUG_ENABLED") != null;
+        } catch (Exception e) {
+            DEBUG_ENABLED = false;
+        }
+    }
+
     public static void dbg(Object ... objs) {
+        if (!DEBUG_ENABLED) {
+            return ;
+        }
         for (Object o : objs) {
             String printLine;
             if (o.getClass().isArray()) {
@@ -18,6 +31,7 @@ public class Dbg {
             System.err.print(printLine + " ");
         }
         System.err.println();
+        System.err.flush();
     }
 
     public static String arrayToString(Object o) {

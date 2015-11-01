@@ -26,10 +26,10 @@ public class Graph {
         return edges[vertex];
     }
 
-    public Iterable<Integer> getAdjacentVertices(int vertex) {
-        assertVertexIdx(vertex);
-        return () -> new AdjVerticesIterator(edges[vertex]);
-    }
+//    public Iterable<Integer> getAdjacentVertices(int vertex) {
+//        assertVertexIdx(vertex);
+//        return () -> new AdjVerticesIterator(edges[vertex]);
+//    }
 
     private void assertVertexIdx(int v) {
         if (v < 0 || v >= edges.length) {

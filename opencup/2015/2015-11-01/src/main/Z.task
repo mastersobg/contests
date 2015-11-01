@@ -1,0 +1,21 @@
+1 Z
+6 SINGLE
+8 STANDARD
+9 input.txt
+8 STANDARD
+10 output.txt
+0
+8 src/main
+16 -Xmx256m -Xss64m
+4 Main
+6 main.Z
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.01
+0 
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+1

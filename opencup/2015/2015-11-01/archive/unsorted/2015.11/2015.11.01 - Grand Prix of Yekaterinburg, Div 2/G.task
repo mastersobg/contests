@@ -1,0 +1,33 @@
+1 G
+6 SINGLE
+8 STANDARD
+9 input.txt
+8 STANDARD
+10 output.txt
+3
+0
+10 I am Groot
+4 Pfff
+1
+1
+11 I am Groot!
+3 Wow
+1
+2
+16 I am Groot!!!!!!
+8 Woooooow
+1
+8 src/main
+16 -Xmx256m -Xss64m
+4 Main
+6 main.G
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.01
+34 Grand Prix of Yekaterinburg, Div 2
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+1
