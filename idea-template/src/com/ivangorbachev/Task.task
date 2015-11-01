@@ -1,0 +1,21 @@
+4 Task
+6 SINGLE
+8 STANDARD
+9 input.txt
+8 STANDARD
+10 output.txt
+0
+21 src/com/ivangorbachev
+16 -Xmx256m -Xss64m
+4 Main
+22 com.ivangorbachev.Task
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.02
+1 1
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+1
