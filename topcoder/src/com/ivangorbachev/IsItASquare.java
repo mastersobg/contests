@@ -1,12 +1,10 @@
 package com.ivangorbachev;
 
 import com.ivangorbachev.misc.IntIntPair;
-import com.ivangorbachev.misc.Permutations;
 
 import static com.ivangorbachev.geom.GeomUtil.sqrDist;
-import static com.ivangorbachev.misc.P.initArray;
-import static com.ivangorbachev.misc.P.nextPermutation;
-import static com.ivangorbachev.util.Dbg.dbg;
+import static com.ivangorbachev.misc.Permutations.initArray;
+import static com.ivangorbachev.misc.Permutations.nextPermutation;
 
 
 public class IsItASquare {
@@ -16,16 +14,15 @@ public class IsItASquare {
     public String isSquare(int[] x, int[] y) {
         this.x = x;
         this.y = y;
-        Permutations<Boolean> p = new Permutations<Boolean>(4, false);
-        boolean ret = p.generate((order, r, terminate) -> {
+        int []order = initArray(4);
+        boolean found = false;
+        do {
             if (check(order)) {
-                terminate.setValue(true);
-                return true;
+                found = true;
+                break;
             }
-            return false;
-
-        });
-        if (ret) {
+        } while (nextPermutation(order));
+        if (found) {
             return "It's a square";
         } else {
             return "Not a square";

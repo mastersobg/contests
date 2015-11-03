@@ -1,44 +1,44 @@
 package com.ivangorbachev.misc;
 
-import com.ivangorbachev.util.BitsUtil;
+import com.ivangorbachev.util.ArraysUtil;
+
+import static com.ivangorbachev.util.ArraysUtil.reverse;
+import static com.ivangorbachev.util.ArraysUtil.swap;
 
 /**
  * @author Ivan Gorbachev
  */
-public class Permutations<T> {
+public class Permutations {
 
-    private BooleanValue terminate;
-    private int n;
-    private T result;
-
-    public Permutations(int n, T defaultResult) {
-        this.n = n;
-        this.result = defaultResult;
-        terminate = new BooleanValue(false);
-    }
-    public T generate(Callback<T> f) {
-        go(0, n, 0, new int[n], f);
-        return result;
-    }
-
-    private boolean go(int idx, int n, int mask,
-                              int []order, Callback<T> f) {
-        if (idx == n) {
-            result = f.test(order, result, terminate);
-            return terminate.isValue();
-        }
+    public static int[] initArray(int n) {
+        int []ret = new int[n];
         for (int i = 0; i < n; i++) {
-            if (!BitsUtil.checkBit(mask, i)) {
-                order[idx] = i;
-                if (go(idx + 1, n, BitsUtil.setBit(mask, i), order, f)) {
-                    return true;
-                }
+            ret[i] = i;
+        }
+        return ret;
+    }
+
+    public static boolean nextPermutation(int []arr) {
+        if (arr == null || arr.length <= 1) {
+            return false;
+        }
+        int i;
+        for (i = arr.length - 2; i >= 0; --i) {
+            if (arr[i] < arr[i + 1]) {
+                break;
             }
         }
-        return false;
-    }
-
-    public interface Callback<T> {
-        T test(int []order, T ret, BooleanValue terminate);
+        if (i < 0) {
+            return false;
+        }
+        int j;
+        for (j = arr.length - 1; j >= 0; --j) {
+            if (arr[j] > arr[i]) {
+                break;
+            }
+        }
+        swap(arr, i, j);
+        reverse(arr, i + 1, arr.length - 1);
+        return true;
     }
 }
