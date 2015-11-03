@@ -28,4 +28,16 @@ public class ArraysUtil {
             Arrays.fill(v[i], value);
         }
     }
+
+    public static void swap(int []arr, int i, int j) {
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    public static void reverse(int []arr, int i, int j) {
+        for (int p0 = i, p1 = j; p0 < p1; ++p0, --p1) {
+            swap(arr, p0, p1);
+        }
+    }
 }

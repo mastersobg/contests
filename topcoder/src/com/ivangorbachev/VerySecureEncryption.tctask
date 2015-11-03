@@ -1,0 +1,74 @@
+20 VerySecureEncryption
+7 encrypt
+16 java.lang.String
+3
+16 java.lang.String
+7 message
+5 int[]
+3 key
+3 int
+1 K
+4
+0
+3
+String
+3 abc
+int[] 3
+1
+2
+0
+int 1
+String
+3 cab
+1
+1
+3
+String
+5 abcde
+int[] 5
+4
+3
+2
+1
+0
+int 1
+String
+5 edcba
+1
+2
+3
+String
+5 abcde
+int[] 5
+4
+3
+2
+1
+0
+int 2
+String
+5 abcde
+1
+3
+3
+String
+8 uogcodlk
+int[] 8
+4
+3
+6
+2
+5
+1
+0
+7
+int 44
+String
+8 goodluck
+1
+10 2015.11.03
+17 TopCoder SRM #668
+0
+38 com.ivangorbachev.VerySecureEncryption
+1
+4 256M
