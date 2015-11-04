@@ -21,6 +21,7 @@ public class Dbg {
         if (!DEBUG_ENABLED) {
             return ;
         }
+        System.out.println("=====Debug output=====");
         for (Object o : objs) {
             String printLine;
             if (o.getClass().isArray()) {
@@ -28,10 +29,11 @@ public class Dbg {
             } else {
                 printLine = o.toString();
             }
-            System.err.print(printLine + " ");
+            System.out.print(printLine + " ");
         }
-        System.err.println();
-        System.err.flush();
+        System.out.println();
+        System.out.println("=====End of debug output=====");
+        System.out.flush();
     }
 
     public static String arrayToString(Object o) {

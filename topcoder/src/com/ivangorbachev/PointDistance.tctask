@@ -1,0 +1,79 @@
+13 PointDistance
+9 findPoint
+5 int[]
+4
+3 int
+2 x1
+3 int
+2 y1
+3 int
+2 x2
+3 int
+2 y2
+6
+0
+4
+int -1
+int 0
+int 1
+int 0
+int[] 2
+8
+48
+1
+1
+4
+int 1
+int 1
+int -1
+int -1
+int[] 2
+25
+-63
+1
+2
+4
+int 0
+int 1
+int 2
+int 3
+int[] 2
+41
+65
+1
+3
+4
+int 5
+int -4
+int -2
+int 5
+int[] 2
+68
+70
+1
+4
+4
+int -50
+int -50
+int 50
+int -50
+int[] 2
+67
+4
+1
+5
+4
+int -50
+int 50
+int -49
+int 49
+int[] 2
+73
+-25
+1
+10 2015.11.04
+17 TopCoder SRM #667
+0
+31 com.ivangorbachev.PointDistance
+1
+4 256M

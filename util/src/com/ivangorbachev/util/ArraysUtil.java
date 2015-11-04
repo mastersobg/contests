@@ -29,6 +29,12 @@ public class ArraysUtil {
         }
     }
 
+    public static void fill(int [][][]v, int value) {
+        for (int i = 0; i < v.length; i++) {
+            fill(v[i], value);
+        }
+    }
+
     public static void swap(int []arr, int i, int j) {
         int t = arr[i];
         arr[i] = arr[j];

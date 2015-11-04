@@ -47,4 +47,10 @@ public class NumbersUtil {
         }
         return ret;
     }
+
+    public static long gcd(long a, long b) {
+        if (a < b)
+            return gcd(b, a);
+        return b == 0 ? a : gcd(b, a % b);
+    }
 }
