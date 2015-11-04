@@ -1,0 +1,30 @@
+22 C - Beautiful Function
+6 SINGLE
+8 STANDARD
+-1
+8 STANDARD
+-1
+1
+0
+24 3
+0 10 4
+10 0 4
+20 10 4
+
+14 t 
+abs((t-10))
+1
+21 src/com/ivangorbachev
+8 -Xmx256M
+4 Main
+23 com.ivangorbachev.TaskC
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.04
+30 Codeforces Round #329 (Div. 2)
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+1
