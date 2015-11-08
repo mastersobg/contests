@@ -1,0 +1,30 @@
+16 D - Max and Bike
+6 SINGLE
+8 STANDARD
+-1
+8 STANDARD
+-1
+1
+0
+15 2 1 2
+1 10
+5 9
+
+30 3.849644710502
+1.106060157705
+
+1
+21 src/com/ivangorbachev
+8 -Xmx256M
+4 Main
+23 com.ivangorbachev.TaskD
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.08
+30 Codeforces Round #330 (Div. 2)
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+1
