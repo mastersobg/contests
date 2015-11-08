@@ -35,7 +35,7 @@ public class Reader {
     }
 
     public int readInt() {
-        return Integer.valueOf(readString());
+        return Integer.parseInt(readString());
     }
 
     public int[] readIntArray(int size) {

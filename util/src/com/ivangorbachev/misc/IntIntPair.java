@@ -52,8 +52,13 @@ public class IntIntPair implements Comparable<IntIntPair> {
     @Override
     public int compareTo(IntIntPair o) {
         if (x == o.x) {
-            return y == o.y ? 0 : y < o.x ? -1 : 1;
+            return y == o.y ? 0 : y < o.y ? -1 : 1;
         }
         return x < o.x ? -1 : 1;
+    }
+
+    @Override
+    public String toString() {
+        return "[x = " + x + " y = " + y + "]";
     }
 }

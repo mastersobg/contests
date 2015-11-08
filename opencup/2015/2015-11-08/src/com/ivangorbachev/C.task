@@ -1,0 +1,35 @@
+1 C
+6 SINGLE
+8 STANDARD
+9 input.txt
+8 STANDARD
+10 output.txt
+3
+0
+7 0 0 1 1
+2 NO
+1
+1
+7 1 1 4 2
+6 YES
+UR
+0
+2
+19 -732 -732 -732 -732
+5 YES
+S
+0
+21 src/com/ivangorbachev
+19 -Xmx8560m -Xss2000m
+4 Main
+19 com.ivangorbachev.C
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.08
+28 Grand Prix of Siberia, Div 2
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+1
+0

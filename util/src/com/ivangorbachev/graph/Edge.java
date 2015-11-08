@@ -4,7 +4,7 @@ package com.ivangorbachev.graph;
  * @author Ivan Gorbachev
  */
 class Edge {
-    private final int from, to;
+    public final int from, to;
 
     public Edge(int from, int to) {
         this.from = from;
