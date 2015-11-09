@@ -1,0 +1,57 @@
+24 1837 - Isenbaev's Number
+6 SINGLE
+8 STANDARD
+9 input.txt
+8 STANDARD
+10 output.txt
+3
+0
+196 7
+Isenbaev Oparin Toropov
+Ayzenshteyn Oparin Samsonov
+Ayzenshteyn Chevdar Samsonov
+Fominykh Isenbaev Oparin
+Dublennykh Fominykh Ivankov
+Burmistrov Dublennykh Kurpilyanskiy
+Cormen Leiserson Rivest
+
+182 Ayzenshteyn 2
+Burmistrov 3
+Chevdar 3
+Cormen undefined
+Dublennykh 2
+Fominykh 1
+Isenbaev 0
+Ivankov 2
+Kurpilyanskiy 3
+Leiserson undefined
+Oparin 1
+Rivest undefined
+Samsonov 2
+Toropov 1
+
+1
+1
+25 1
+Isenbaev Oparin Toropov
+-1
+1
+2
+24 1
+Isenbae Isen Isenbaeva
+-1
+1
+21 src/com/ivangorbachev
+15 -Xmx64M -Xss64M
+4 Main
+26 com.ivangorbachev.Task1837
+39 net.egork.chelper.checkers.TokenChecker
+0 
+0
+10 2015.11.10
+8 Volume 9
+1
+27 com.ivangorbachev.io.Reader
+19 java.io.PrintWriter
+0
+0

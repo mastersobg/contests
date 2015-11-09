@@ -1,0 +1,12 @@
+package %package%;
+
+import %InputClassFQN%;
+import %OutputClassFQN%;
+import java.util.*;
+import java.io.*;
+import static java.lang.Math.*;
+
+public class %TaskClass% {
+    public void solve(int testNumber, %InputClass% in, %OutputClass% out) {
+    }
+}
