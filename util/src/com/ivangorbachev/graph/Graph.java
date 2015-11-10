@@ -33,7 +33,6 @@ public class Graph {
         from = new int[edges];
         to = new int[edges];
         nextEdge = new int[edges];
-        weight = new long[edges];
     }
 
     public int from(int edgeId) {

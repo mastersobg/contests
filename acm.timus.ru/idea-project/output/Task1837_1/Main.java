@@ -32,14 +32,15 @@ public class Main {
         OutputStream outputStream = System.out;
         Reader in = new Reader(inputStream);
         PrintWriter out = new PrintWriter(outputStream);
-        Task1837 solver = new Task1837();
+        Task1837_1 solver = new Task1837_1();
         solver.solve(1, in, out);
         out.close();
     }
 
-    static class Task1837 {
+    static class Task1837_1 {
         HashMap<String, Integer> names = new HashMap<>();
         int isenbaevIdx = -1;
+        List<Integer>[] g;
 
         public void solve(int testNumber, Reader in, PrintWriter out) {
             int n = in.readInt();
@@ -52,17 +53,22 @@ public class Main {
                     v[i][j] = idx;
                 }
             }
-            Graph g = new Graph(names.size(), n * 3 * 2);
-            for (int i = 0; i < n; ++i) {
-                g.addBidirectionalEdge(v[i][0], v[i][1]);
-                g.addBidirectionalEdge(v[i][0], v[i][2]);
-                g.addBidirectionalEdge(v[i][1], v[i][2]);
+            g = new ArrayList[names.size()];
+            for (int i = 0; i < g.length; i++) {
+                g[i] = new ArrayList<>();
+            }
+            for (int it = 0; it < n; ++it) {
+                for (int i = 0; i < 3; ++i)
+                    for (int j = 0; j < 3; ++j)
+                        if (i != j) {
+                            g[v[it][i]].add(v[it][j]);
+                        }
             }
 
             int[] d = new int[names.size()];
             Arrays.fill(d, Integer.MAX_VALUE);
             if (isenbaevIdx != -1)
-                bfs(g, d, isenbaevIdx);
+                bfs(d, isenbaevIdx);
 //            dfs(g, d, isenbaevIdx, 0);
             List<Pair<String, Integer>> ret = new ArrayList<>();
             for (Map.Entry<String, Integer> entry : names.entrySet()) {
@@ -77,15 +83,14 @@ public class Main {
             }
         }
 
-        private void bfs(Graph g, int[] d, int v) {
+        private void bfs(int[] d, int v) {
             d[v] = 0;
             int[] q = new int[500];
             int b = 0, e = 0;
             q[e++] = v;
             for (; b < e; ++b) {
                 v = q[b];
-                for (int id = g.firstEdge(v); id != -1; id = g.nextEdge(id)) {
-                    int u = g.to(id);
+                for (int u : g[v]) {
                     if (d[u] > d[v] + 1) {
                         d[u] = d[v] + 1;
                         q[e++] = u;
@@ -131,81 +136,6 @@ public class Main {
 
         public int readInt() {
             return Integer.parseInt(readString());
-        }
-
-    }
-
-    static class Graph {
-        private int lastEdgeIdx;
-        private int[] firstOutgoing;
-        private int[] from;
-        private int[] to;
-        private int[] nextEdge;
-        private long[] weight;
-
-        public Graph(int vertices) {
-            this(vertices, vertices);
-        }
-
-        public Graph(int vertices, int edges) {
-            edges = Math.max(2, edges);
-            this.lastEdgeIdx = 0;
-
-            firstOutgoing = new int[vertices];
-            Arrays.fill(firstOutgoing, -1);
-
-            from = new int[edges];
-            to = new int[edges];
-            nextEdge = new int[edges];
-        }
-
-        public int to(int edgeId) {
-            return to[edgeId];
-        }
-
-        public int nextEdge(int edgeId) {
-            return nextEdge[edgeId];
-        }
-
-        public int firstEdge(int v) {
-            return firstOutgoing[v];
-        }
-
-        private void ensureCapacity() {
-            if (lastEdgeIdx == from.length) {
-                int newLength = from.length + (from.length >> 1);
-                from = Arrays.copyOf(from, newLength);
-                to = Arrays.copyOf(to, newLength);
-                nextEdge = Arrays.copyOf(nextEdge, newLength);
-                if (weight != null) {
-                    weight = Arrays.copyOf(weight, newLength);
-                }
-            }
-        }
-
-        public void addBidirectionalEdge(int from, int to) {
-            addEdge(from, to, 0L);
-            addEdge(to, from, 0L);
-        }
-
-        public void addEdge(int from, int to, long weight) {
-            ensureCapacity();
-            int edgeId = lastEdgeIdx++;
-            if (firstOutgoing[from] == -1) {
-                nextEdge[edgeId] = -1;
-            } else {
-                nextEdge[edgeId] = firstOutgoing[from];
-            }
-            firstOutgoing[from] = edgeId;
-
-            this.from[edgeId] = from;
-            this.to[edgeId] = to;
-            if (weight != 0) {
-                if (this.weight == null) {
-                    this.weight = new long[this.from.length];
-                }
-                this.weight[edgeId] = weight;
-            }
         }
 
     }
