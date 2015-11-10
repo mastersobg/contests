@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.io.IOException;
-import java.util.Iterator;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import java.util.Arrays;
@@ -63,7 +62,8 @@ public class Main {
             int[] d = new int[names.size()];
             Arrays.fill(d, Integer.MAX_VALUE);
             if (isenbaevIdx != -1)
-                dfs(g, d, isenbaevIdx, 0);
+                bfs(g, d, isenbaevIdx);
+//            dfs(g, d, isenbaevIdx, 0);
             List<Pair<String, Integer>> ret = new ArrayList<>();
             for (Map.Entry<String, Integer> entry : names.entrySet()) {
                 ret.add(new Pair<>(entry.getKey(), d[entry.getValue()]));
@@ -77,15 +77,20 @@ public class Main {
             }
         }
 
-        private void dfs(Graph g, int[] d, int v, int step) {
-            if (d[v] <= step) {
-                return;
-            }
-            d[v] = step;
-            for (int u : g.getAdjacentVertices(v)) {
-//        for (int id = g.firstEdge(v); id != -1; id = g.nextEdge(id)) {
-//            int to = g.to(id);
-                dfs(g, d, u, step + 1);
+        private void bfs(Graph g, int[] d, int v) {
+            d[v] = 0;
+            int[] q = new int[500];
+            int b = 0, e = 0;
+            q[e++] = v;
+            for (; b < e; ++b) {
+                v = q[b];
+                for (int id = g.firstEdge(v); id != -1; id = g.nextEdge(id)) {
+                    int u = g.to(id);
+                    if (d[u] > d[v] + 1) {
+                        d[u] = d[v] + 1;
+                        q[e++] = u;
+                    }
+                }
             }
         }
 
@@ -155,6 +160,18 @@ public class Main {
             weight = new long[edges];
         }
 
+        public int to(int edgeId) {
+            return to[edgeId];
+        }
+
+        public int nextEdge(int edgeId) {
+            return nextEdge[edgeId];
+        }
+
+        public int firstEdge(int v) {
+            return firstOutgoing[v];
+        }
+
         private void ensureCapacity() {
             if (lastEdgeIdx == from.length) {
                 int newLength = from.length + (from.length >> 1);
@@ -190,41 +207,6 @@ public class Main {
                 }
                 this.weight[edgeId] = weight;
             }
-        }
-
-        public Iterable<Integer> getAdjacentVertices(final int vertex) {
-            return new Iterable<Integer>() {
-
-                public Iterator<Integer> iterator() {
-                    return new AdjVerticesIterator(vertex);
-                }
-            };
-        }
-
-        public class AdjVerticesIterator implements Iterator<Integer> {
-            int currentEdgeIdx;
-
-            public AdjVerticesIterator(int vertex) {
-                this.currentEdgeIdx = firstOutgoing[vertex];
-            }
-
-
-            public boolean hasNext() {
-                return currentEdgeIdx != -1;
-            }
-
-
-            public Integer next() {
-                int vertex = to[currentEdgeIdx];
-                this.currentEdgeIdx = nextEdge[currentEdgeIdx];
-                return vertex;
-            }
-
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
         }
 
     }

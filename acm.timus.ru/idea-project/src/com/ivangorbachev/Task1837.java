@@ -36,7 +36,8 @@ public class Task1837 {
         int[] d = new int[names.size()];
         Arrays.fill(d, Integer.MAX_VALUE);
         if (isenbaevIdx != -1)
-            dfs(g, d, isenbaevIdx, 0);
+            bfs(g, d, isenbaevIdx);
+//            dfs(g, d, isenbaevIdx, 0);
         List<Pair<String, Integer>> ret = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : names.entrySet()) {
             ret.add(new Pair<>(entry.getKey(), d[entry.getValue()]));
@@ -50,17 +51,33 @@ public class Task1837 {
         }
     }
 
-    private void dfs(Graph g, int[] d, int v, int step) {
-        if (d[v] <= step) {
-            return;
-        }
-        d[v] = step;
-        for (int u : g.getAdjacentVertices(v)) {
-//        for (int id = g.firstEdge(v); id != -1; id = g.nextEdge(id)) {
-//            int to = g.to(id);
-            dfs(g, d, u, step + 1);
+    private void bfs(Graph g, int []d, int v) {
+        d[v] = 0;
+        int []q = new int[500];
+        int b = 0, e = 0;
+        q[e++] = v;
+        for (; b < e; ++b) {
+            v = q[b];
+            for (int id = g.firstEdge(v); id != -1; id = g.nextEdge(id)) {
+                int u = g.to(id);
+                if (d[u] > d[v] + 1) {
+                    d[u] = d[v] + 1;
+                    q[e++] = u;
+                }
+            }
         }
     }
+//    private void dfs(Graph g, int[] d, int v, int step) {
+//        if (d[v] <= step) {
+//            return;
+//        }
+//        d[v] = step;
+//        for (int u : g.getAdjacentVertices(v)) {
+////        for (int id = g.firstEdge(v); id != -1; id = g.nextEdge(id)) {
+////            int to = g.to(id);
+//            dfs(g, d, u, step + 1);
+//        }
+//    }
 
     void isenbaev(String s, int idx) {
         if ("Isenbaev".equals(s)) {
